@@ -1,0 +1,1811 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>CloverPath Alumni Relations</title>
+<link rel="icon" type="image/png" href="https://cdn.prod.website-files.com/68bf2f9e0722f5e0b402ad4d/690fe64080636dddc021d46b_CloverPath%20Favicon.png" />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+<style>
+  :root {
+    --green: #008208;
+    --green-light: #7bbc00;
+    --forest: #0f3d1e;
+    --cream: #f7f5f0;
+    --ink: #16211a;
+    --muted: #5f6b62;
+    --line: #e4e0d6;
+    --card: #ffffff;
+    --green-tint: #eef5ee;
+    --amber: #b7791f;
+    --amber-tint: #fbf3e3;
+    --red: #b4453a;
+    --red-tint: #fbeeec;
+    --radius: 16px;
+    --radius-sm: 10px;
+    --shadow: 0 1px 2px rgba(15, 61, 30, 0.04), 0 8px 24px rgba(15, 61, 30, 0.06);
+    --shadow-lg: 0 12px 40px rgba(15, 61, 30, 0.18);
+    --font: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    --topbar-h: 60px;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  html, body { background: var(--cream); }
+
+  body {
+    font-family: var(--font);
+    color: var(--ink);
+    -webkit-font-smoothing: antialiased;
+    line-height: 1.45;
+  }
+
+  button { font-family: inherit; cursor: pointer; }
+  a { color: inherit; }
+  img { display: block; }
+
+  /* ---------- Topbar ---------- */
+  .topbar {
+    position: sticky; top: 0; z-index: 60;
+    height: var(--topbar-h);
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 0 20px;
+    background: rgba(255,255,255,0.92);
+    backdrop-filter: blur(8px);
+    border-bottom: 1px solid var(--line);
+  }
+  .topbar .left { display: flex; align-items: center; gap: 14px; }
+  .topbar .logo { height: 26px; width: auto; }
+  .topbar .context {
+    font-size: 13px; font-weight: 600; color: var(--forest);
+    padding-left: 14px; border-left: 1px solid var(--line);
+    letter-spacing: 0.2px;
+  }
+  .hamburger {
+    display: none; border: 1px solid var(--line); background: #fff;
+    width: 38px; height: 38px; border-radius: 10px; align-items: center; justify-content: center;
+  }
+  .hamburger svg { width: 18px; height: 18px; stroke: var(--forest); }
+  .who { display: flex; align-items: center; gap: 10px; }
+  .who .name { font-size: 13px; font-weight: 500; color: var(--muted); }
+  .who .avatar {
+    width: 34px; height: 34px; border-radius: 50%;
+    background: var(--forest); color: #fff;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 12px; font-weight: 700; letter-spacing: 0.3px;
+  }
+
+  /* ---------- App shell ---------- */
+  .app { display: flex; align-items: flex-start; }
+
+  .sidebar {
+    flex: 0 0 244px;
+    position: sticky; top: var(--topbar-h);
+    height: calc(100vh - var(--topbar-h));
+    background: #fff;
+    border-right: 1px solid var(--line);
+    padding: 18px 14px;
+    overflow-y: auto;
+    z-index: 50;
+  }
+  .nav-group-label {
+    font-size: 11px; font-weight: 700; letter-spacing: 0.6px;
+    text-transform: uppercase; color: var(--muted);
+    padding: 6px 10px 8px;
+  }
+  .side-head { display: none; align-items: center; justify-content: space-between; padding: 2px 6px 10px; margin-bottom: 6px; border-bottom: 1px solid var(--line); }
+  .side-head span { font-size: 11px; font-weight: 700; letter-spacing: 0.5px; text-transform: uppercase; color: var(--muted); padding-left: 4px; }
+  .side-close { border: 1px solid var(--line); background: #fff; width: 34px; height: 34px; border-radius: 9px; font-size: 20px; line-height: 1; color: var(--muted); display: flex; align-items: center; justify-content: center; }
+  .side-close:hover { background: var(--cream); }
+  .nav-item {
+    width: 100%; text-align: left; border: none; background: none;
+    display: flex; align-items: center; gap: 11px;
+    padding: 10px 11px; border-radius: var(--radius-sm);
+    font-size: 14px; font-weight: 500; color: var(--muted);
+    margin-bottom: 2px; position: relative;
+    transition: background 0.14s, color 0.14s;
+  }
+  .nav-item svg { width: 18px; height: 18px; stroke: currentColor; flex: 0 0 18px; }
+  .nav-item:hover { background: var(--cream); color: var(--ink); }
+  .nav-item.active { background: var(--green-tint); color: var(--forest); font-weight: 600; }
+  .nav-item.active::before {
+    content: ""; position: absolute; left: 0; top: 8px; bottom: 8px; width: 3px;
+    background: var(--green); border-radius: 0 3px 3px 0;
+  }
+  .nav-item .badge {
+    margin-left: auto; background: var(--green); color: #fff;
+    font-size: 11px; font-weight: 700; min-width: 20px; height: 20px;
+    border-radius: 10px; padding: 0 6px; display: flex; align-items: center; justify-content: center;
+  }
+  .scrim {
+    display: none; position: fixed; inset: var(--topbar-h) 0 0 0; z-index: 40;
+    background: rgba(15,61,30,0.32);
+  }
+
+  /* ---------- Main ---------- */
+  .main { flex: 1 1 0; min-width: 0; padding: 26px 30px 60px; }
+
+  .page-head { display: flex; align-items: flex-end; justify-content: space-between; gap: 16px; margin-bottom: 22px; flex-wrap: wrap; }
+  .page-head h1 { font-size: 25px; font-weight: 700; color: var(--forest); letter-spacing: -0.3px; }
+  .page-head p { font-size: 14px; color: var(--muted); margin-top: 3px; max-width: 560px; }
+  .page-head .count-pill {
+    font-size: 13px; font-weight: 600; color: var(--green);
+    background: var(--green-tint); padding: 7px 13px; border-radius: 999px; white-space: nowrap;
+  }
+
+  .view { display: none; }
+  .view.active { display: block; animation: fade 0.22s ease; }
+  @keyframes fade { from { opacity: 0; transform: translateY(4px); } to { opacity: 1; transform: none; } }
+
+  /* ---------- KPI tiles ---------- */
+  .kpis { display: grid; grid-template-columns: repeat(auto-fit, minmax(168px, 1fr)); gap: 14px; margin-bottom: 26px; }
+  .kpi { background: var(--card); border: 1px solid var(--line); border-radius: var(--radius); padding: 18px; box-shadow: var(--shadow); }
+  .kpi .k-label { font-size: 12px; font-weight: 600; color: var(--muted); letter-spacing: 0.2px; }
+  .kpi .k-num { font-size: 30px; font-weight: 800; color: var(--forest); line-height: 1.1; margin-top: 6px; }
+  .kpi .k-sub { font-size: 12px; color: var(--muted); margin-top: 4px; }
+  .kpi.accent { background: var(--forest); border-color: var(--forest); }
+  .kpi.accent .k-label, .kpi.accent .k-sub { color: rgba(255,255,255,0.72); }
+  .kpi.accent .k-num { color: #fff; }
+
+  .overview-grid { display: grid; grid-template-columns: 1.4fr 1fr; gap: 18px; align-items: start; }
+  .panel { background: var(--card); border: 1px solid var(--line); border-radius: var(--radius); box-shadow: var(--shadow); }
+  .panel-head { padding: 16px 18px; border-bottom: 1px solid var(--line); display: flex; align-items: center; justify-content: space-between; }
+  .panel-head h2 { font-size: 15px; font-weight: 700; color: var(--forest); }
+  .panel-head a { font-size: 13px; font-weight: 600; color: var(--green); text-decoration: none; cursor: pointer; }
+  .panel-body { padding: 8px 18px 16px; }
+  .att-row { display: flex; align-items: center; gap: 12px; padding: 12px 0; border-bottom: 1px solid var(--line); }
+  .att-row:last-child { border-bottom: none; }
+  .att-row .a-main { flex: 1 1 0; min-width: 0; }
+  .att-row .a-main .a-name { font-weight: 600; font-size: 14px; }
+  .att-row .a-main .a-meta { font-size: 12.5px; color: var(--muted); }
+  .att-row .a-age { font-size: 12px; font-weight: 600; color: var(--amber); background: var(--amber-tint); padding: 4px 9px; border-radius: 999px; white-space: nowrap; }
+
+  /* ---------- Buttons ---------- */
+  .btn { border: 1px solid var(--line); background: #fff; color: var(--ink); font-size: 13px; font-weight: 600; padding: 9px 15px; border-radius: 10px; display: inline-flex; align-items: center; gap: 7px; transition: background 0.14s, border-color 0.14s; }
+  .btn:hover { background: var(--cream); }
+  .btn svg { width: 15px; height: 15px; }
+  .btn.primary { background: var(--green); border-color: var(--green); color: #fff; }
+  .btn.primary:hover { background: #006d07; }
+  .btn.forest { background: var(--forest); border-color: var(--forest); color: #fff; }
+  .btn.forest:hover { background: #0b2f17; }
+  .btn.sm { padding: 7px 11px; font-size: 12.5px; }
+  .btn.ghost { background: none; }
+  .btn:disabled { opacity: 0.5; cursor: not-allowed; }
+  .btn.danger { color: var(--red); border-color: #e7cdc9; }
+  .btn.danger:hover { background: var(--red-tint); }
+
+  /* ---------- Directory layout ---------- */
+  .dir { display: flex; align-items: flex-start; gap: 20px; }
+  .filters {
+    position: fixed; top: var(--topbar-h); left: 0; bottom: 0; z-index: 70;
+    width: 330px; max-width: 88vw;
+    background: var(--card); border-right: 1px solid var(--line);
+    box-shadow: var(--shadow-lg);
+    display: flex; flex-direction: column;
+    transform: translateX(-100%); transition: transform 0.25s ease;
+  }
+  .filters.open { transform: none; }
+  .filters-head { padding: 16px 18px; border-bottom: 1px solid var(--line); display: flex; align-items: center; gap: 12px; flex: 0 0 auto; }
+  .filters-head h3 { font-size: 15px; font-weight: 700; color: var(--forest); margin-right: auto; }
+  .filters-head .clear { border: none; background: none; font-size: 12.5px; font-weight: 600; color: var(--green); padding: 4px; }
+  .filters-head .x { border: 1px solid var(--line); background: #fff; width: 32px; height: 32px; border-radius: 9px; font-size: 18px; line-height: 1; color: var(--muted); display: flex; align-items: center; justify-content: center; flex: 0 0 32px; }
+  .filters-head .x:hover { background: var(--cream); }
+  .filters-body { padding: 6px 18px 22px; flex: 1 1 auto; overflow-y: auto; }
+  .filter-scrim { display: none; position: fixed; inset: var(--topbar-h) 0 0 0; z-index: 65; background: rgba(15,61,30,0.32); }
+  .filter-scrim.show { display: block; }
+  .fgroup { padding: 12px 0; border-bottom: 1px solid var(--line); }
+  .fgroup:last-child { border-bottom: none; }
+  .fgroup > label { display: block; font-size: 12px; font-weight: 700; color: var(--ink); letter-spacing: 0.2px; margin-bottom: 8px; }
+  .frow { display: flex; gap: 8px; }
+  .frow select, .ftext { width: 100%; font-family: inherit; font-size: 13px; padding: 8px 10px; border: 1px solid var(--line); border-radius: 9px; background: #fff; color: var(--ink); }
+  .ftext::placeholder { color: #9aa39c; }
+
+  /* multiselect */
+  .ms { position: relative; }
+  .ms-btn { width: 100%; text-align: left; background: #fff; border: 1px solid var(--line); border-radius: 9px; padding: 8px 30px 8px 10px; font-size: 13px; color: var(--ink); position: relative; }
+  .ms-btn::after { content: ""; position: absolute; right: 11px; top: 50%; width: 7px; height: 7px; border-right: 2px solid var(--muted); border-bottom: 2px solid var(--muted); transform: translateY(-65%) rotate(45deg); }
+  .ms-btn.has { color: var(--forest); font-weight: 600; border-color: var(--green); }
+  .ms-panel { display: none; position: absolute; z-index: 30; top: calc(100% + 5px); left: 0; right: 0; background: #fff; border: 1px solid var(--line); border-radius: 11px; box-shadow: var(--shadow-lg); max-height: 240px; overflow-y: auto; padding: 6px; }
+  .ms.open .ms-panel { display: block; }
+  .ms-opt { display: flex; align-items: center; gap: 9px; padding: 7px 9px; border-radius: 8px; font-size: 13px; cursor: pointer; }
+  .ms-opt:hover { background: var(--cream); }
+  .ms-opt input { accent-color: var(--green); width: 15px; height: 15px; }
+
+  .slider-row { display: flex; align-items: center; gap: 10px; }
+  .slider-row input[type=range] { flex: 1 1 0; accent-color: var(--green); }
+  .slider-row .sval { font-size: 13px; font-weight: 700; color: var(--forest); min-width: 42px; text-align: right; }
+
+  .toggle-row { display: flex; align-items: center; gap: 9px; font-size: 13px; cursor: pointer; padding: 4px 0; }
+  .toggle-row input { accent-color: var(--green); width: 16px; height: 16px; }
+
+  /* chips */
+  .chips { display: flex; flex-wrap: wrap; gap: 7px; margin-bottom: 14px; min-height: 2px; }
+  .chip { display: inline-flex; align-items: center; gap: 6px; font-size: 12.5px; font-weight: 600; color: var(--forest); background: var(--green-tint); border: 1px solid #d4e6d4; padding: 5px 6px 5px 11px; border-radius: 999px; }
+  .chip button { border: none; background: none; line-height: 1; color: var(--green); font-size: 14px; padding: 0 2px; }
+
+  /* ---------- Results ---------- */
+  .results { flex: 1 1 0; min-width: 0; }
+  .res-toolbar { display: flex; align-items: center; gap: 12px; margin-bottom: 14px; }
+  .res-toolbar .fcount { background: #fff; color: var(--green); font-size: 11px; font-weight: 800; min-width: 18px; height: 18px; border-radius: 9px; padding: 0 5px; display: inline-flex; align-items: center; justify-content: center; }
+  .res-toolbar .btn.primary .fcount { background: rgba(255,255,255,0.9); }
+  .res-scroll { overflow: visible; }
+  .res-head { display: none; }
+  /* Fluid card grid: reflows to fit whatever width the column has,
+     so nothing (including capacity) can ever exceed the screen. */
+  #alumniRows { display: grid; grid-template-columns: repeat(auto-fill, minmax(min(300px, 100%), 1fr)); gap: 12px; align-items: start; }
+  .arow { display: grid; grid-template-columns: 1fr 1fr; gap: 14px 12px; background: var(--card); border: 1px solid var(--line); border-radius: var(--radius); padding: 16px; box-shadow: var(--shadow); min-width: 0; }
+  .arow:hover { border-color: #cfe0cf; }
+  .arow .cell { min-width: 0; }
+  .arow .ident, .arow .role, .arow .cell-cap { grid-column: 1 / -1; }
+  .arow .row-actions { grid-column: 1 / -1; display: flex; flex-direction: row; gap: 8px; }
+  .arow .row-actions .li-btn { flex: 1 1 0; }
+  .arow .cell::before { content: attr(data-label); display: block; font-size: 10.5px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.3px; color: var(--muted); margin-bottom: 3px; }
+  .arow .ident::before, .arow .role::before, .arow .row-actions::before { display: none; }
+
+  .ident { display: flex; align-items: center; gap: 11px; min-width: 0; }
+  .ident .av { width: 38px; height: 38px; border-radius: 50%; background: var(--green-tint); color: var(--forest); font-weight: 700; font-size: 13px; display: flex; align-items: center; justify-content: center; flex: 0 0 38px; }
+  .ident .nm { font-weight: 600; font-size: 14px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .ident .sub { font-size: 12px; color: var(--muted); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .role .r-title { font-size: 13.5px; font-weight: 500; }
+  .role .r-ind { font-size: 12px; color: var(--muted); }
+  .cell-loc { font-size: 13px; color: var(--ink); }
+
+  .badge-eng { font-size: 11.5px; font-weight: 700; padding: 4px 10px; border-radius: 999px; display: inline-block; }
+  .eng-High { background: var(--green-tint); color: var(--green); }
+  .eng-Medium { background: var(--amber-tint); color: var(--amber); }
+  .eng-Low { background: #eef0ee; color: var(--muted); }
+
+  .cap { font-size: 12.5px; }
+  .cap .cap-txt { font-weight: 600; }
+  .cap .cap-open { color: var(--green); }
+  .cap .cap-full { color: var(--red); }
+  .meter { height: 6px; border-radius: 4px; background: #e9ece8; margin-top: 5px; overflow: hidden; }
+  .meter > i { display: block; height: 100%; background: var(--green-light); border-radius: 4px; }
+  .cap.full .meter > i { background: var(--red); }
+
+  .accept { font-size: 15px; font-weight: 800; color: var(--forest); }
+  .accept small { display: block; font-size: 10.5px; font-weight: 600; color: var(--muted); letter-spacing: 0.3px; }
+
+  .row-actions { display: flex; flex-direction: column; gap: 6px; }
+  .li-btn { display: inline-flex; align-items: center; gap: 6px; font-size: 12px; font-weight: 600; padding: 6px 9px; border-radius: 8px; border: 1px solid var(--line); background: #fff; color: var(--forest); text-decoration: none; justify-content: center; }
+  .li-btn:hover { background: var(--cream); }
+  .li-btn.verified { border-color: var(--green); color: var(--green); }
+  .li-btn.locked { color: #9aa39c; cursor: not-allowed; }
+  .li-btn svg { width: 13px; height: 13px; }
+
+  .empty { text-align: center; padding: 54px 20px; color: var(--muted); }
+  .empty h3 { color: var(--forest); font-size: 16px; margin-bottom: 6px; }
+  .empty p { font-size: 13.5px; }
+
+  /* ---------- Requests ---------- */
+  .subtabs { display: flex; gap: 6px; background: #fff; border: 1px solid var(--line); border-radius: 12px; padding: 5px; margin-bottom: 18px; width: fit-content; max-width: 100%; overflow-x: auto; }
+  .subtab { border: none; background: none; font-size: 13.5px; font-weight: 600; color: var(--muted); padding: 9px 16px; border-radius: 9px; white-space: nowrap; display: flex; align-items: center; gap: 8px; }
+  .subtab.active { background: var(--green-tint); color: var(--forest); }
+  .subtab .ct { background: #e6e9e4; color: var(--muted); font-size: 11px; font-weight: 700; padding: 1px 7px; border-radius: 999px; }
+  .subtab.active .ct { background: var(--green); color: #fff; }
+
+  .req-filters { display: flex; gap: 10px; flex-wrap: wrap; margin-bottom: 16px; align-items: center; }
+  .req-filters .ftext { width: 220px; }
+  .req-filters .ms { width: 180px; }
+
+  .rcard { background: var(--card); border: 1px solid var(--line); border-radius: var(--radius); box-shadow: var(--shadow); padding: 16px 18px; margin-bottom: 12px; }
+  .rcard .r-top { display: flex; align-items: flex-start; justify-content: space-between; gap: 14px; flex-wrap: wrap; }
+  .rcard .stu { display: flex; align-items: center; gap: 12px; min-width: 0; }
+  .rcard .stu .av { width: 40px; height: 40px; border-radius: 50%; background: var(--forest); color: #fff; font-weight: 700; font-size: 13px; display: flex; align-items: center; justify-content: center; flex: 0 0 40px; }
+  .rcard .stu .s-name { font-weight: 700; font-size: 15px; color: var(--ink); }
+  .rcard .stu .s-want { font-size: 13px; color: var(--muted); }
+  .rcard .stu .s-want b { color: var(--forest); font-weight: 600; }
+  .rcard .r-note { font-size: 13px; color: var(--ink); background: var(--cream); border-radius: 10px; padding: 10px 13px; margin-top: 12px; }
+  .rcard .r-date { font-size: 12px; color: var(--muted); margin-top: 10px; }
+  .rcard .r-actions { display: flex; gap: 8px; flex-shrink: 0; }
+
+  .matchline { display: flex; align-items: center; gap: 14px; margin-top: 14px; flex-wrap: wrap; }
+  .matchline .node { display: flex; align-items: center; gap: 10px; background: var(--cream); border: 1px solid var(--line); border-radius: 12px; padding: 9px 13px; flex: 1 1 240px; min-width: 0; }
+  .matchline .node .av { width: 34px; height: 34px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: 700; font-size: 12px; flex: 0 0 34px; }
+  .matchline .node.stu-node .av { background: var(--forest); color: #fff; }
+  .matchline .node.alum-node .av { background: var(--green-tint); color: var(--forest); }
+  .matchline .node .nn { font-weight: 600; font-size: 13.5px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .matchline .node .mm { font-size: 12px; color: var(--muted); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .matchline .conn { color: var(--green); flex: 0 0 auto; }
+  .matchline .conn svg { width: 22px; height: 22px; }
+  .alum-stats { display: flex; gap: 16px; margin-top: 12px; flex-wrap: wrap; }
+  .alum-stats .as { font-size: 12px; color: var(--muted); }
+  .alum-stats .as b { display: block; font-size: 15px; font-weight: 800; color: var(--forest); }
+  .status-pill { font-size: 11.5px; font-weight: 700; padding: 4px 11px; border-radius: 999px; }
+  .st-pending { background: var(--amber-tint); color: var(--amber); }
+  .st-connected { background: var(--green-tint); color: var(--green); }
+  .st-archived { background: #eef0ee; color: var(--muted); }
+
+  /* ---------- Other engagements ---------- */
+  .eng-types { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 14px; margin-bottom: 22px; }
+  .eng-type { background: var(--card); border: 1px solid var(--line); border-radius: var(--radius); padding: 16px 18px; box-shadow: var(--shadow); }
+  .eng-type.soon { opacity: 0.72; }
+  .eng-type .et-top { display: flex; align-items: center; justify-content: space-between; gap: 10px; }
+  .eng-type .et-name { font-size: 15px; font-weight: 700; color: var(--forest); }
+  .eng-type .et-desc { font-size: 12.5px; color: var(--muted); margin-top: 6px; line-height: 1.45; }
+  .eng-type .et-count { font-size: 26px; font-weight: 800; color: var(--forest); margin-top: 12px; }
+  .eng-type .et-count small { font-size: 12px; font-weight: 600; color: var(--muted); margin-left: 4px; }
+  .et-status { font-size: 11px; font-weight: 700; padding: 3px 10px; border-radius: 999px; white-space: nowrap; }
+  .et-active { background: var(--green-tint); color: var(--green); }
+  .et-soon { background: #eef0ee; color: var(--muted); }
+
+  .fmt-badge { font-size: 11.5px; font-weight: 700; padding: 3px 10px; border-radius: 999px; display: inline-flex; align-items: center; gap: 5px; }
+  .fmt-in_person { background: var(--green-tint); color: var(--green); }
+  .fmt-zoom { background: #e8eef6; color: #2f5b9c; }
+  .fmt-either { background: var(--cream); color: var(--ink); border: 1px solid var(--line); }
+
+  .pool-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(min(330px, 100%), 1fr)); gap: 12px; }
+  .poolcard { background: var(--card); border: 1px solid var(--line); border-radius: var(--radius); box-shadow: var(--shadow); padding: 16px; min-width: 0; }
+  .poolcard .pc-top { display: flex; align-items: center; gap: 11px; min-width: 0; }
+  .poolcard .pc-top .av { width: 40px; height: 40px; border-radius: 50%; background: var(--green-tint); color: var(--forest); font-weight: 700; font-size: 13px; display: flex; align-items: center; justify-content: center; flex: 0 0 40px; }
+  .poolcard .pc-name { font-weight: 600; font-size: 14.5px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .poolcard .pc-sub { font-size: 12px; color: var(--muted); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .poolcard .pc-row { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; margin-top: 12px; }
+  .poolcard .pc-label { font-size: 10.5px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.3px; color: var(--muted); }
+  .poolcard .pc-foot { display: flex; align-items: center; justify-content: space-between; gap: 10px; margin-top: 14px; }
+  .poolcard .pc-date { font-size: 12px; color: var(--muted); }
+
+  .pcard { background: var(--card); border: 1px solid var(--line); border-radius: var(--radius); box-shadow: var(--shadow); padding: 18px; margin-bottom: 12px; }
+  .pcard .p-top { display: flex; align-items: flex-start; justify-content: space-between; gap: 14px; flex-wrap: wrap; }
+  .pcard .p-title { font-size: 16px; font-weight: 700; color: var(--ink); }
+  .pcard .p-meta { display: flex; gap: 8px 16px; flex-wrap: wrap; margin-top: 7px; font-size: 13px; color: var(--muted); align-items: center; }
+  .pcard .p-meta b { color: var(--forest); font-weight: 600; }
+  .pcard .roster { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; margin-top: 14px; }
+  .pcard .rost { display: flex; align-items: center; gap: 8px; background: var(--cream); border: 1px solid var(--line); border-radius: 999px; padding: 5px 12px 5px 5px; }
+  .pcard .rost .av { width: 26px; height: 26px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: 700; font-size: 10px; background: var(--green-tint); color: var(--forest); flex: 0 0 26px; }
+  .pcard .rost .rn { font-size: 12.5px; font-weight: 600; }
+  .pcard .rost .rs { font-size: 10px; font-weight: 700; padding: 1px 7px; border-radius: 999px; text-transform: uppercase; letter-spacing: 0.2px; }
+  .rs-confirmed { background: var(--green-tint); color: var(--green); }
+  .rs-invited { background: var(--amber-tint); color: var(--amber); }
+  .rs-declined { background: var(--red-tint); color: var(--red); }
+  .pcard .roster .none { font-size: 13px; color: var(--muted); }
+  .pcard .p-foot { display: flex; align-items: center; justify-content: space-between; gap: 10px; margin-top: 16px; flex-wrap: wrap; }
+  .seats { font-size: 12.5px; color: var(--muted); }
+  .seats b { color: var(--forest); font-weight: 800; font-size: 15px; }
+  .pstat { font-size: 11.5px; font-weight: 700; padding: 4px 11px; border-radius: 999px; }
+  .pstat-planning { background: var(--amber-tint); color: var(--amber); }
+  .pstat-confirmed { background: var(--green-tint); color: var(--green); }
+  .pstat-completed { background: #eef0ee; color: var(--muted); }
+
+  .m-section-label { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.3px; color: var(--muted); margin-bottom: 10px; }
+  .pf-select, .field select { width: 100%; font-family: inherit; font-size: 13.5px; border: 1px solid var(--line); border-radius: 10px; padding: 10px 12px; color: var(--ink); background: #fff; }
+  .rost-manage { display: flex; align-items: center; gap: 10px; padding: 10px 12px; border: 1px solid var(--line); border-radius: 11px; margin-bottom: 8px; }
+  .rost-manage .av { width: 34px; height: 34px; border-radius: 50%; background: var(--green-tint); color: var(--forest); font-weight: 700; font-size: 12px; display: flex; align-items: center; justify-content: center; flex: 0 0 34px; }
+  .rost-manage .rm-main { flex: 1 1 0; min-width: 0; }
+  .rost-manage .rm-name { font-weight: 600; font-size: 13.5px; }
+  .rost-manage .rm-meta { font-size: 12px; color: var(--muted); }
+  .rost-manage .rm-actions { display: flex; gap: 6px; align-items: center; }
+  .ibtn { border: 1px solid var(--line); background: #fff; font-size: 12px; font-weight: 600; padding: 6px 10px; border-radius: 8px; color: var(--forest); }
+  .ibtn:hover { background: var(--cream); }
+  .ibtn.danger { color: var(--red); border-color: #e7cdc9; }
+  .ibtn.danger:hover { background: var(--red-tint); }
+
+  /* ---------- Modal ---------- */
+  .overlay { display: none; position: fixed; inset: 0; z-index: 100; background: rgba(15,61,30,0.42); align-items: flex-start; justify-content: center; padding: 40px 18px; overflow-y: auto; }
+  .overlay.open { display: flex; }
+  .modal { background: #fff; border-radius: 20px; box-shadow: var(--shadow-lg); width: 100%; max-width: 600px; animation: pop 0.2s ease; }
+  @keyframes pop { from { opacity: 0; transform: translateY(10px) scale(0.99); } to { opacity: 1; transform: none; } }
+  .modal-head { padding: 20px 22px 14px; border-bottom: 1px solid var(--line); display: flex; align-items: flex-start; justify-content: space-between; gap: 12px; }
+  .modal-head h2 { font-size: 18px; font-weight: 700; color: var(--forest); }
+  .modal-head p { font-size: 13px; color: var(--muted); margin-top: 3px; }
+  .modal-head .x { border: none; background: var(--cream); width: 32px; height: 32px; border-radius: 9px; font-size: 18px; color: var(--muted); flex: 0 0 32px; }
+  .modal-body { padding: 18px 22px; }
+  .modal-foot { padding: 14px 22px 20px; display: flex; justify-content: space-between; gap: 10px; align-items: center; flex-wrap: wrap; }
+  .modal-foot .note { font-size: 11.5px; color: var(--muted); flex: 1 1 200px; }
+
+  .cand { display: flex; align-items: center; gap: 12px; padding: 12px; border: 1px solid var(--line); border-radius: 12px; margin-bottom: 9px; }
+  .cand .av { width: 38px; height: 38px; border-radius: 50%; background: var(--green-tint); color: var(--forest); font-weight: 700; font-size: 13px; display: flex; align-items: center; justify-content: center; flex: 0 0 38px; }
+  .cand .c-main { flex: 1 1 0; min-width: 0; }
+  .cand .c-name { font-weight: 600; font-size: 14px; }
+  .cand .c-meta { font-size: 12px; color: var(--muted); }
+  .cand .c-cap { text-align: right; font-size: 12px; }
+  .cand .c-cap b { display: block; font-size: 14px; font-weight: 800; color: var(--forest); }
+  .cand.full { opacity: 0.55; }
+  .cand-tools { display: flex; gap: 10px; align-items: center; margin-bottom: 10px; flex-wrap: wrap; }
+  .cand-toggles { display: flex; gap: 18px; align-items: center; margin-bottom: 14px; flex-wrap: wrap; }
+  .cand-count { font-size: 12.5px; font-weight: 600; color: var(--muted); margin-left: auto; }
+
+  .field { margin-bottom: 14px; }
+  .field label { display: block; font-size: 12px; font-weight: 700; color: var(--ink); margin-bottom: 6px; }
+  .field input, .field textarea { width: 100%; font-family: inherit; font-size: 13.5px; border: 1px solid var(--line); border-radius: 10px; padding: 10px 12px; color: var(--ink); resize: vertical; }
+  .field textarea { min-height: 168px; line-height: 1.5; }
+  .field .to-box { background: var(--cream); border-radius: 10px; padding: 10px 12px; font-size: 13px; }
+  .field .to-box b { color: var(--forest); }
+
+  .prof-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px 18px; margin-top: 6px; }
+  .prof-grid .pf .pl { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.3px; color: var(--muted); }
+  .prof-grid .pf .pv { font-size: 14px; font-weight: 500; margin-top: 2px; }
+  .topic-chips { display: flex; flex-wrap: wrap; gap: 7px; margin-top: 8px; }
+  .topic-chips span { font-size: 12px; font-weight: 600; color: var(--forest); background: var(--green-tint); padding: 5px 11px; border-radius: 999px; }
+
+  /* ---------- Toast ---------- */
+  .toasts { position: fixed; right: 18px; bottom: 18px; z-index: 200; display: flex; flex-direction: column; gap: 9px; }
+  .toast { background: var(--forest); color: #fff; font-size: 13.5px; font-weight: 500; padding: 12px 16px; border-radius: 12px; box-shadow: var(--shadow-lg); display: flex; align-items: center; gap: 9px; animation: slideup 0.25s ease; max-width: 320px; }
+  .toast svg { width: 16px; height: 16px; flex: 0 0 16px; }
+  @keyframes slideup { from { opacity: 0; transform: translateY(12px); } to { opacity: 1; transform: none; } }
+
+  /* ---------- Responsive ---------- */
+  @media (max-width: 1100px) {
+    .overview-grid { grid-template-columns: 1fr; }
+  }
+  @media (max-width: 1024px) {
+    .hamburger { display: flex; }
+    .side-head { display: flex; }
+    .sidebar {
+      position: fixed; top: var(--topbar-h); left: 0; bottom: 0; height: auto;
+      transform: translateX(-100%); transition: transform 0.25s ease;
+      box-shadow: var(--shadow-lg); width: 270px; flex-basis: 270px;
+    }
+    .sidebar.open { transform: none; }
+    .scrim.show { display: block; }
+    .main { padding: 22px 22px 60px; }
+  }
+  @media (max-width: 680px) {
+    .topbar .context { display: none; }
+    .who .name { display: none; }
+    .main { padding: 18px 14px 50px; }
+    .page-head h1 { font-size: 22px; }
+    .res-head { display: none; }
+    .res-scroll { overflow: visible; }
+    .arow {
+      grid-template-columns: 1fr 1fr; gap: 14px 12px; padding: 16px;
+    }
+    .arow .ident { grid-column: 1 / -1; }
+    .arow .role { grid-column: 1 / -1; }
+    .arow .cell-cap { grid-column: 1 / -1; }
+    .arow .row-actions { grid-column: 1 / -1; flex-direction: row; }
+    .arow .row-actions .li-btn { flex: 1 1 0; }
+    .arow .cell::before {
+      content: attr(data-label); display: block; font-size: 10.5px; font-weight: 700;
+      text-transform: uppercase; letter-spacing: 0.3px; color: var(--muted); margin-bottom: 3px;
+    }
+    .arow .ident::before, .arow .role::before { display: none; }
+    .prof-grid { grid-template-columns: 1fr; }
+    .rcard .r-actions { width: 100%; }
+    .rcard .r-actions .btn { flex: 1 1 0; justify-content: center; }
+    .toasts { left: 14px; right: 14px; }
+    .toast { max-width: none; }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    * { animation: none !important; transition: none !important; }
+  }
+  :focus-visible { outline: 2px solid var(--green); outline-offset: 2px; border-radius: 6px; }
+</style>
+</head>
+<body>
+
+  <!-- ============================================================
+       DEMO DATA BLOCK
+       The only thing that changes between demo and live is this block.
+       To go live: replace ALUMNI and REQUESTS with a Supabase fetch
+       after the session bridge resolves, then call renderAll().
+  ============================================================= -->
+  <script>
+  const DEMO = true;
+
+  const ALUMNI = [
+    { id:1,  name:"Maya Chen",      grad:2016, major:"Computer Science",     role:"Senior Product Manager", company:"Stripe",                industry:"Technology",            field:"Product Management",     location:"San Francisco, CA", seniority:"Senior", engagement:"High",   capacity:5, scheduled:3, acceptance:92, linkedin:true,  url:"https://www.linkedin.com/", email:"maya.chen@alum.edu",    topics:["Breaking into tech","PM interviews","Mentoring"] },
+    { id:2,  name:"Daniel Okafor",  grad:2014, major:"Finance",              role:"Vice President",         company:"Goldman Sachs",         industry:"Financial Services",    field:"Investment Banking",     location:"New York, NY",      seniority:"Senior", engagement:"High",   capacity:4, scheduled:4, acceptance:88, linkedin:true,  url:"https://www.linkedin.com/", email:"daniel.okafor@alum.edu", topics:["IB recruiting","Networking","Resume review"] },
+    { id:3,  name:"Priya Nair",     grad:2019, major:"Biology",              role:"Medical Resident",       company:"Mass General",          industry:"Healthcare",            field:"Medicine",               location:"Boston, MA",        seniority:"Mid",    engagement:"Medium", capacity:3, scheduled:1, acceptance:76, linkedin:true,  url:"https://www.linkedin.com/", email:"priya.nair@alum.edu",   topics:["Med school","MCAT","Clinical paths"] },
+    { id:4,  name:"Jordan Webb",    grad:2012, major:"Marketing",            role:"Director of Brand",      company:"Nike",                  industry:"Consumer Goods",        field:"Marketing",              location:"Portland, OR",      seniority:"Senior", engagement:"Medium", capacity:3, scheduled:2, acceptance:81, linkedin:false, url:"",                          email:"jordan.webb@alum.edu",  topics:["Brand careers","Creative work"] },
+    { id:5,  name:"Sofia Reyes",    grad:2020, major:"Economics",            role:"Strategy Analyst",       company:"McKinsey & Company",    industry:"Consulting",            field:"Management Consulting",  location:"Chicago, IL",       seniority:"Mid",    engagement:"High",   capacity:6, scheduled:4, acceptance:90, linkedin:true,  url:"https://www.linkedin.com/", email:"sofia.reyes@alum.edu",  topics:["Consulting recruiting","Case prep"] },
+    { id:6,  name:"Aaron Lee",      grad:2017, major:"Mechanical Engineering",role:"Hardware Engineer",     company:"Tesla",                 industry:"Automotive",            field:"Engineering",            location:"Austin, TX",        seniority:"Mid",    engagement:"Low",    capacity:2, scheduled:0, acceptance:64, linkedin:true,  url:"https://www.linkedin.com/", email:"aaron.lee@alum.edu",    topics:["Engineering","Manufacturing"] },
+    { id:7,  name:"Grace Kim",      grad:2015, major:"English",              role:"Senior Editor",          company:"Penguin Random House",  industry:"Media",                 field:"Publishing",             location:"New York, NY",      seniority:"Senior", engagement:"Medium", capacity:3, scheduled:1, acceptance:79, linkedin:true,  url:"https://www.linkedin.com/", email:"grace.kim@alum.edu",    topics:["Publishing","Writing careers"] },
+    { id:8,  name:"Marcus Hill",    grad:2018, major:"Political Science",    role:"Policy Advisor",         company:"U.S. Senate",           industry:"Government",            field:"Public Policy",          location:"Washington, DC",    seniority:"Mid",    engagement:"Medium", capacity:4, scheduled:2, acceptance:83, linkedin:false, url:"",                          email:"marcus.hill@alum.edu",  topics:["Government careers","Law school"] },
+    { id:9,  name:"Elena Petrova",  grad:2013, major:"Chemistry",            role:"R&D Scientist",          company:"Pfizer",                industry:"Pharmaceuticals",       field:"Research",               location:"Cambridge, MA",     seniority:"Senior", engagement:"Low",    capacity:2, scheduled:1, acceptance:70, linkedin:true,  url:"https://www.linkedin.com/", email:"elena.petrova@alum.edu",topics:["PhD paths","Industry research"] },
+    { id:10, name:"Tyler Brooks",   grad:2021, major:"Computer Science",     role:"Software Engineer",      company:"Google",                industry:"Technology",            field:"Software Engineering",   location:"Mountain View, CA", seniority:"Junior", engagement:"High",   capacity:5, scheduled:2, acceptance:95, linkedin:true,  url:"https://www.linkedin.com/", email:"tyler.brooks@alum.edu", topics:["SWE interviews","New grad advice"] },
+    { id:11, name:"Nina Alvarez",   grad:2016, major:"Accounting",           role:"Audit Manager",          company:"Deloitte",              industry:"Professional Services", field:"Accounting",             location:"Dallas, TX",        seniority:"Mid",    engagement:"Medium", capacity:3, scheduled:0, acceptance:77, linkedin:true,  url:"https://www.linkedin.com/", email:"nina.alvarez@alum.edu", topics:["CPA track","Big 4"] },
+    { id:12, name:"Omar Haddad",    grad:2019, major:"Design",               role:"Product Designer",       company:"Airbnb",                industry:"Technology",            field:"Design",                 location:"San Francisco, CA", seniority:"Mid",    engagement:"High",   capacity:4, scheduled:1, acceptance:89, linkedin:true,  url:"https://www.linkedin.com/", email:"omar.haddad@alum.edu",  topics:["Design portfolio","UX careers"] },
+    { id:13, name:"Rachel Stone",   grad:2011, major:"Nursing",              role:"Nurse Practitioner",     company:"Cleveland Clinic",      industry:"Healthcare",            field:"Nursing",                location:"Cleveland, OH",     seniority:"Senior", engagement:"Low",    capacity:2, scheduled:0, acceptance:68, linkedin:false, url:"",                          email:"rachel.stone@alum.edu", topics:["Nursing","Healthcare paths"] },
+    { id:14, name:"Kevin Zhao",     grad:2018, major:"Statistics",           role:"Data Scientist",         company:"Netflix",               industry:"Technology",            field:"Data Science",           location:"Los Angeles, CA",   seniority:"Mid",    engagement:"High",   capacity:5, scheduled:3, acceptance:91, linkedin:true,  url:"https://www.linkedin.com/", email:"kevin.zhao@alum.edu",   topics:["Data science","ML careers"] },
+    { id:15, name:"Hannah Brooks",  grad:2017, major:"History",              role:"Associate",              company:"Latham & Watkins",      industry:"Legal",                 field:"Law",                    location:"New York, NY",      seniority:"Mid",    engagement:"Medium", capacity:3, scheduled:2, acceptance:80, linkedin:true,  url:"https://www.linkedin.com/", email:"hannah.brooks@alum.edu",topics:["Law school","Legal careers"] },
+    { id:16, name:"Devon Carter",   grad:2020, major:"Business",             role:"Founder",                company:"Early-stage startup",   industry:"Technology",            field:"Entrepreneurship",       location:"Remote",            seniority:"Mid",    engagement:"Medium", capacity:3, scheduled:1, acceptance:74, linkedin:true,  url:"https://www.linkedin.com/", email:"devon.carter@alum.edu", topics:["Startups","Fundraising"] }
+  ];
+
+  const REQUESTS = [
+    { id:"r1", student:"Jada Thompson",  init:"JT", industry:"Technology",         field:"Product Management",   note:"Exploring PM roles after graduation and would love to hear how someone broke in from a non-technical major.", date:"2026-06-22", status:"new",       alumniId:null, sent:null,        connected:null },
+    { id:"r2", student:"Liam Foster",    init:"LF", industry:"Financial Services", field:"Investment Banking",   note:"Recruiting for summer analyst roles and want help preparing for technical interviews.",                       date:"2026-06-23", status:"new",       alumniId:null, sent:null,        connected:null },
+    { id:"r3", student:"Aisha Rahman",   init:"AR", industry:"Healthcare",         field:"Medicine",             note:"Pre-med, trying to decide between an MD path and clinical research.",                                          date:"2026-06-21", status:"new",       alumniId:null, sent:null,        connected:null },
+    { id:"r4", student:"Noah Bennett",   init:"NB", industry:"Consulting",         field:"Management Consulting",note:"Looking for case prep guidance ahead of fall recruiting.",                                                     date:"2026-06-20", status:"new",       alumniId:null, sent:null,        connected:null },
+    { id:"r5", student:"Sara Lin",       init:"SL", industry:"Technology",         field:"Software Engineering", note:"New grad SWE candidate, want interview tips and a sense of day to day work.",                                 date:"2026-06-19", status:"pending",   alumniId:10,   sent:"2026-06-20", connected:null },
+    { id:"r6", student:"Carlos Mendez",  init:"CM", industry:"Technology",         field:"Design",               note:"Building out a UX portfolio and want a review from someone in industry.",                                     date:"2026-06-18", status:"pending",   alumniId:12,   sent:"2026-06-19", connected:null },
+    { id:"r7", student:"Emily Davis",    init:"ED", industry:"Media",              field:"Publishing",           note:"Interested in editorial careers and how to land a first role.",                                               date:"2026-06-15", status:"connected", alumniId:7,    sent:"2026-06-16", connected:"2026-06-18" },
+    { id:"r8", student:"Ryan Park",      init:"RP", industry:"Financial Services", field:"Investment Banking",   note:"Networking into IB and want to understand the recruiting timeline.",                                          date:"2026-06-14", status:"connected", alumniId:2,    sent:"2026-06-15", connected:"2026-06-17" }
+  ];
+
+  // Engagement types beyond coffee chats. Panels is live; others are placeholders
+  // to show how more non-monetary engagement avenues slot into the same system.
+  const ENGAGEMENT_TYPES = [
+    { id:"panels",         name:"Panels",          desc:"In-person or Zoom panels for current students",  active:true },
+    { id:"guest_lectures", name:"Guest Lectures",  desc:"Speak to a class for a single session",          active:true }
+  ];
+
+  // Alumni who opted into a non-coffee-chat engagement. format: in_person | zoom | either
+  const OPTINS = [
+    { alumniId:1,  type:"panels", format:"zoom",      topics:["Careers in Tech","Product Management"], opted:"2026-06-09" },
+    { alumniId:5,  type:"panels", format:"either",    topics:["Consulting Recruiting","Life After Graduation"], opted:"2026-06-10" },
+    { alumniId:10, type:"panels", format:"zoom",      topics:["Breaking into SWE","New Grad Life"], opted:"2026-06-11" },
+    { alumniId:2,  type:"panels", format:"in_person", topics:["Finance Careers","Recruiting"], opted:"2026-06-08" },
+    { alumniId:7,  type:"panels", format:"either",    topics:["Careers in Media","Creative Paths"], opted:"2026-06-12" },
+    { alumniId:12, type:"panels", format:"zoom",      topics:["Design Careers","Portfolio Building"], opted:"2026-06-12" },
+    { alumniId:14, type:"panels", format:"either",    topics:["Data Science","ML Careers"], opted:"2026-06-13" },
+    { alumniId:8,  type:"panels", format:"in_person", topics:["Public Service","Law and Policy"], opted:"2026-06-14" },
+    { alumniId:16, type:"panels", format:"zoom",      topics:["Entrepreneurship","Startups"], opted:"2026-06-15" },
+    { alumniId:4,  type:"panels", format:"either",    topics:["Marketing Careers","Brand"], opted:"2026-06-16" },
+
+    { alumniId:4,  type:"guest_lectures", format:"in_person", topics:["Marketing Careers","Brand Strategy"], opted:"2026-06-09" },
+    { alumniId:8,  type:"guest_lectures", format:"either",    topics:["Public Policy","Careers in Government"], opted:"2026-06-10" },
+    { alumniId:14, type:"guest_lectures", format:"zoom",      topics:["Data Science","Analytics in Practice"], opted:"2026-06-11" },
+    { alumniId:5,  type:"guest_lectures", format:"either",    topics:["Consulting 101","Structured Problem Solving"], opted:"2026-06-12" },
+    { alumniId:11, type:"guest_lectures", format:"in_person", topics:["Accounting Careers","The CPA Path"], opted:"2026-06-13" },
+    { alumniId:9,  type:"guest_lectures", format:"zoom",      topics:["Research Careers","Science in Industry"], opted:"2026-06-14" },
+    { alumniId:1,  type:"guest_lectures", format:"zoom",      topics:["Product Management","Careers in Tech"], opted:"2026-06-15" }
+  ];
+
+  // Panel events. status: planning | confirmed | completed. member status: invited | confirmed | declined
+  const PANELS = [
+    { id:"p1", title:"Breaking Into Tech",        topic:"Technology Careers", date:"2026-07-15", format:"zoom",      location:"Zoom (link sent on confirm)", seats:4, status:"planning",
+      panelists:[ { alumniId:1, status:"confirmed" }, { alumniId:10, status:"invited" } ] },
+    { id:"p2", title:"Life After Graduation",     topic:"Early Career",       date:"2026-07-22", format:"in_person", location:"Campus Center, Room 108",       seats:5, status:"confirmed",
+      panelists:[ { alumniId:5, status:"confirmed" }, { alumniId:2, status:"confirmed" }, { alumniId:7, status:"invited" } ] },
+    { id:"p3", title:"Creative and Design Careers", topic:"Design",           date:"2026-06-10", format:"zoom",      location:"Zoom",                          seats:3, status:"completed",
+      panelists:[ { alumniId:12, status:"confirmed" }, { alumniId:7, status:"confirmed" } ] }
+  ];
+
+  // Guest lecture sessions. Same schema as panels; members are speakers.
+  const LECTURES = [
+    { id:"l1", title:"Intro to Marketing, Guest Session", topic:"Marketing",     date:"2026-07-18", format:"in_person", location:"Campus Center, Room 204", seats:1, status:"planning",
+      panelists:[ { alumniId:4, status:"invited" } ] },
+    { id:"l2", title:"Data Science in the Real World",    topic:"Data Science",  date:"2026-07-25", format:"zoom",      location:"Zoom",                   seats:2, status:"confirmed",
+      panelists:[ { alumniId:14, status:"confirmed" } ] },
+    { id:"l3", title:"Public Policy Career Talk",         topic:"Public Policy", date:"2026-06-05", format:"in_person", location:"Lecture Hall A",          seats:1, status:"completed",
+      panelists:[ { alumniId:8, status:"confirmed" } ] }
+  ];
+  </script>
+
+  <!-- ============================================================
+       APP SHELL
+  ============================================================= -->
+  <header class="topbar">
+    <div class="left">
+      <button class="hamburger" id="hamburger" aria-label="Open menu">
+        <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round"><path d="M4 6h16M4 12h16M4 18h16"/></svg>
+      </button>
+      <img class="logo" src="https://cdn.prod.website-files.com/68bf2f9e0722f5e0b402ad4d/691bf346a23098b5a5a4c19b_CloverPath_HorizontalLogo_FullColor.png" alt="CloverPath" />
+      <span class="context">Alumni Relations</span>
+    </div>
+    <div class="who">
+      <span class="name">Demo</span>
+      <span class="avatar">CP</span>
+    </div>
+  </header>
+
+  <div class="scrim" id="scrim"></div>
+
+  <div class="app">
+    <aside class="sidebar" id="sidebar">
+      <div class="side-head">
+        <span>Menu</span>
+        <button class="side-close" id="sideClose" aria-label="Close menu">&times;</button>
+      </div>
+      <div class="nav-group-label">Department</div>
+      <button class="nav-item active" data-view="overview">
+        <svg viewBox="0 0 24 24" fill="none" stroke-width="1.8"><rect x="3" y="3" width="7" height="7" rx="1.5"/><rect x="14" y="3" width="7" height="7" rx="1.5"/><rect x="3" y="14" width="7" height="7" rx="1.5"/><rect x="14" y="14" width="7" height="7" rx="1.5"/></svg>
+        Overview
+      </button>
+      <button class="nav-item" data-view="directory">
+        <svg viewBox="0 0 24 24" fill="none" stroke-width="1.8"><circle cx="9" cy="8" r="3.2"/><path d="M3.5 19c0-3 2.6-5 5.5-5s5.5 2 5.5 5"/><circle cx="17.5" cy="9" r="2.6"/><path d="M16 14.4c2.4.3 4.2 2 4.2 4.6"/></svg>
+        Alumni Directory
+      </button>
+      <button class="nav-item" data-view="requests">
+        <svg viewBox="0 0 24 24" fill="none" stroke-width="1.8"><path d="M21 11.5a8 8 0 0 1-11.6 7.1L4 20l1.4-5.4A8 8 0 1 1 21 11.5Z"/></svg>
+        Coffee Chat Requests
+        <span class="badge" id="navReqBadge">0</span>
+      </button>
+      <button class="nav-item" data-view="engagements">
+        <svg viewBox="0 0 24 24" fill="none" stroke-width="1.8"><path d="M17 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9.5" cy="7" r="3.2"/><path d="M16 3.5a3.2 3.2 0 0 1 0 6.2M22 21v-2a4 4 0 0 0-3-3.8"/></svg>
+        Other Engagements
+        <span class="badge" id="navEngBadge">0</span>
+      </button>
+    </aside>
+
+    <main class="main">
+
+      <!-- ===================== OVERVIEW ===================== -->
+      <section class="view active" id="view-overview">
+        <div class="page-head">
+          <div>
+            <h1>Alumni Relations</h1>
+            <p>Your view into the alumni network and the coffee chats students are asking for. Filter the directory, then match requests to the right people.</p>
+          </div>
+        </div>
+
+        <div class="kpis" id="kpis"></div>
+
+        <div class="overview-grid">
+          <div class="panel">
+            <div class="panel-head">
+              <h2>Requests waiting longest</h2>
+              <a data-go="requests">Open requests</a>
+            </div>
+            <div class="panel-body" id="attentionList"></div>
+          </div>
+          <div class="panel">
+            <div class="panel-head">
+              <h2>Top alumni this month</h2>
+              <a data-go="directory">Open directory</a>
+            </div>
+            <div class="panel-body" id="topAlumni"></div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ===================== DIRECTORY ===================== -->
+      <section class="view" id="view-directory">
+        <div class="page-head">
+          <div>
+            <h1>Alumni Directory</h1>
+            <p>Filter by graduation year, major, industry, post-grad field, location, engagement, capacity, and more.</p>
+          </div>
+          <span class="count-pill" id="dirCount">0 alumni</span>
+        </div>
+
+        <div class="res-toolbar">
+          <button class="btn" id="toggleFilters">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M3 5h18M6 12h12M10 19h4"/></svg>
+            Filters
+          </button>
+        </div>
+
+        <div class="filter-scrim" id="filterScrim"></div>
+        <div class="dir">
+          <aside class="filters" id="filterRail">
+            <div class="filters-head">
+              <h3>Filters</h3>
+              <button class="clear" id="clearFilters">Clear all</button>
+              <button class="x" id="closeFilters" aria-label="Close filters">&times;</button>
+            </div>
+            <div class="filters-body">
+              <div class="fgroup">
+                <label>Search</label>
+                <input class="ftext" id="fSearch" type="text" placeholder="Name, company, or role" />
+              </div>
+              <div class="fgroup">
+                <label>Graduation year</label>
+                <div class="frow">
+                  <select id="fGradFrom"></select>
+                  <select id="fGradTo"></select>
+                </div>
+              </div>
+              <div class="fgroup"><label>Major</label><div class="ms" data-ms="major"></div></div>
+              <div class="fgroup"><label>Industry</label><div class="ms" data-ms="industry"></div></div>
+              <div class="fgroup"><label>Post-grad field</label><div class="ms" data-ms="field"></div></div>
+              <div class="fgroup"><label>Location</label><div class="ms" data-ms="location"></div></div>
+              <div class="fgroup"><label>Engagement</label><div class="ms" data-ms="engagement"></div></div>
+              <div class="fgroup"><label>Seniority</label><div class="ms" data-ms="seniority"></div></div>
+              <div class="fgroup"><label>Can speak to</label><div class="ms" data-ms="topics"></div></div>
+              <div class="fgroup">
+                <label>Minimum acceptance rate</label>
+                <div class="slider-row">
+                  <input type="range" id="fAccept" min="0" max="100" step="5" value="0" />
+                  <span class="sval" id="fAcceptVal">0%</span>
+                </div>
+              </div>
+              <div class="fgroup">
+                <label class="toggle-row"><input type="checkbox" id="fOpen" /> Has open spots this month</label>
+                <label class="toggle-row"><input type="checkbox" id="fVerified" /> LinkedIn verified only</label>
+              </div>
+            </div>
+          </aside>
+
+          <div class="results">
+            <div class="chips" id="chips"></div>
+            <div class="res-scroll">
+              <div class="res-head">
+                <span>Alumni</span><span>Role</span><span>Location</span><span>Engagement</span><span>Capacity</span><span>Accept</span><span></span>
+              </div>
+              <div id="alumniRows"></div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ===================== REQUESTS ===================== -->
+      <section class="view" id="view-requests">
+        <div class="page-head">
+          <div>
+            <h1>Coffee Chat Requests</h1>
+            <p>Review what students are asking for, assign the right alumni, send the outreach, then connect the two once the alumni says yes.</p>
+          </div>
+        </div>
+
+        <div class="subtabs">
+          <button class="subtab active" data-sub="new">New <span class="ct" id="ctNew">0</span></button>
+          <button class="subtab" data-sub="pending">Pending <span class="ct" id="ctPending">0</span></button>
+          <button class="subtab" data-sub="connected">Connected <span class="ct" id="ctConnected">0</span></button>
+          <button class="subtab" data-sub="archived">Archived <span class="ct" id="ctArchived">0</span></button>
+        </div>
+
+        <div class="req-filters">
+          <input class="ftext" id="rSearch" type="text" placeholder="Search student or note" />
+          <div class="ms" data-ms="rIndustry"></div>
+          <div class="ms" data-ms="rField"></div>
+          <div class="ms" data-ms="rAlumni"></div>
+        </div>
+
+        <div id="requestList"></div>
+      </section>
+
+      <!-- ===================== OTHER ENGAGEMENTS ===================== -->
+      <section class="view" id="view-engagements">
+        <div class="page-head">
+          <div>
+            <h1>Other Engagements</h1>
+            <p>Track alumni who have opted into ways to give back beyond coffee chats, starting with panels. Build a panel, then invite matching alumni from the opt-in pool.</p>
+          </div>
+        </div>
+
+        <div class="eng-types" id="engTypes"></div>
+
+        <div class="subtabs">
+          <button class="subtab active" data-esub="pool">Opt-in pool <span class="ct" id="ctPool">0</span></button>
+          <button class="subtab" data-esub="panels">Panels <span class="ct" id="ctPanels">0</span></button>
+          <button class="subtab" data-esub="guest_lectures">Guest Lectures <span class="ct" id="ctLectures">0</span></button>
+        </div>
+
+        <div class="req-filters" id="poolFilters">
+          <input class="ftext" id="poolSearch" type="text" placeholder="Search alumni or topic" />
+          <div class="ms" data-ms="poolType"></div>
+          <div class="ms" data-ms="poolFormat"></div>
+          <div class="ms" data-ms="poolTopic"></div>
+          <div class="ms" data-ms="poolIndustry"></div>
+        </div>
+
+        <div class="res-toolbar" id="panelsToolbar" style="display:none;">
+          <button class="btn primary" id="newPanelBtn">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg>
+            New panel
+          </button>
+        </div>
+
+        <div id="engList"></div>
+      </section>
+
+    </main>
+  </div>
+
+  <!-- ============================================================
+       ASSIGN / EMAIL MODAL
+  ============================================================= -->
+  <div class="overlay" id="assignOverlay">
+    <div class="modal" id="assignModal">
+      <div class="modal-head">
+        <div>
+          <h2 id="assignTitle">Assign an alumni</h2>
+          <p id="assignSub"></p>
+        </div>
+        <button class="x" data-close>&times;</button>
+      </div>
+
+      <!-- Step 1: pick alumni -->
+      <div id="assignStep1">
+        <div class="modal-body">
+          <div class="cand-tools">
+            <input class="ftext" id="candSearch" type="text" placeholder="Search name or company" style="flex:2 1 160px;" />
+            <div class="ms" data-ms="candIndustry" style="flex:1 1 150px;"></div>
+            <select id="candSort" class="pf-select" style="flex:1 1 150px;">
+              <option value="match">Sort: Best match</option>
+              <option value="open">Most open spots</option>
+              <option value="accept">Highest acceptance</option>
+              <option value="name">Name A to Z</option>
+              <option value="grad">Most recent grads</option>
+            </select>
+          </div>
+          <div class="cand-toggles">
+            <label class="toggle-row"><input type="checkbox" id="candOpenOnly" checked /> Open spots only</label>
+            <label class="toggle-row"><input type="checkbox" id="candMatch" checked /> Matches this request</label>
+            <span class="cand-count" id="candCount"></span>
+          </div>
+          <div id="candList"></div>
+        </div>
+      </div>
+
+      <!-- Step 2: email template -->
+      <div id="assignStep2" style="display:none;">
+        <div class="modal-body">
+          <div class="field">
+            <label>To</label>
+            <div class="to-box" id="emailTo"></div>
+          </div>
+          <div class="field">
+            <label>Subject</label>
+            <input type="text" id="emailSubject" />
+          </div>
+          <div class="field">
+            <label>Message</label>
+            <textarea id="emailBody"></textarea>
+          </div>
+        </div>
+        <div class="modal-foot">
+          <span class="note">Outreach sends through your connected email service (for example Amazon SES). In this demo the send is simulated.</span>
+          <div style="display:flex; gap:8px;">
+            <button class="btn" id="emailBack">Back</button>
+            <button class="btn primary" id="emailSend">Send invitation</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Alumni profile modal -->
+  <div class="overlay" id="profileOverlay">
+    <div class="modal" id="profileModal">
+      <div class="modal-head">
+        <div>
+          <h2 id="profName"></h2>
+          <p id="profRole"></p>
+        </div>
+        <button class="x" data-close>&times;</button>
+      </div>
+      <div class="modal-body" id="profBody"></div>
+    </div>
+  </div>
+
+  <!-- New panel modal -->
+  <div class="overlay" id="panelOverlay">
+    <div class="modal" id="panelModal">
+      <div class="modal-head">
+        <div>
+          <h2 id="panelModalTitle">New panel</h2>
+          <p id="panelModalSub">Create a panel, then invite alumni from the opt-in pool.</p>
+        </div>
+        <button class="x" data-close>&times;</button>
+      </div>
+      <div class="modal-body">
+        <div class="field">
+          <label id="pfTitleLabel">Panel title</label>
+          <input type="text" id="pfTitle" placeholder="e.g. Breaking Into Tech" />
+        </div>
+        <div class="field">
+          <label>Topic area</label>
+          <input type="text" id="pfTopic" placeholder="e.g. Technology Careers" />
+        </div>
+        <div style="display:flex; gap:12px; flex-wrap:wrap;">
+          <div class="field" style="flex:1 1 150px;">
+            <label>Format</label>
+            <select id="pfFormat" class="pf-select">
+              <option value="in_person">In person</option>
+              <option value="zoom">Zoom</option>
+            </select>
+          </div>
+          <div class="field" style="flex:1 1 150px;">
+            <label>Date</label>
+            <input type="date" id="pfDate" />
+          </div>
+          <div class="field" style="flex:0 0 96px;">
+            <label id="pfSeatsLabel">Seats</label>
+            <input type="number" id="pfSeats" min="1" max="12" value="4" />
+          </div>
+        </div>
+        <div class="field">
+          <label id="pfLocLabel">Location</label>
+          <input type="text" id="pfLocation" placeholder="Room or building" />
+        </div>
+      </div>
+      <div class="modal-foot">
+        <span class="note">Saved as a draft in planning status. In this demo it is stored locally only.</span>
+        <button class="btn primary" id="pfCreate">Create panel</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Manage panelists modal -->
+  <div class="overlay" id="manageOverlay">
+    <div class="modal" id="manageModal" style="max-width:640px;">
+      <div class="modal-head">
+        <div>
+          <h2 id="manageTitle">Manage panelists</h2>
+          <p id="manageSub"></p>
+        </div>
+        <button class="x" data-close>&times;</button>
+      </div>
+      <div class="modal-body">
+        <div class="m-section-label" id="rosterLabel">Current panelists</div>
+        <div id="rosterList"></div>
+        <div class="m-section-label" style="margin-top:18px;">Invite from the opt-in pool</div>
+        <div class="cand-tools">
+          <input class="ftext" id="panelCandSearch" type="text" placeholder="Search name, company, or topic" style="flex:2 1 150px;" />
+          <div class="ms" data-ms="panelCandIndustry" style="flex:1 1 140px;"></div>
+          <select id="panelCandSort" class="pf-select" style="flex:1 1 140px;">
+            <option value="match">Sort: Best match</option>
+            <option value="accept">Highest acceptance</option>
+            <option value="name">Name A to Z</option>
+            <option value="grad">Most recent grads</option>
+          </select>
+        </div>
+        <div class="cand-toggles">
+          <label class="toggle-row"><input type="checkbox" id="panelCandFormat" checked /> Format match only</label>
+          <span class="cand-count" id="panelCandCount"></span>
+        </div>
+        <div id="panelCandList"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Invite-to-panel modal (from pool) -->
+  <div class="overlay" id="inviteOverlay">
+    <div class="modal" id="inviteModal">
+      <div class="modal-head">
+        <div>
+          <h2 id="inviteTitle">Invite to a panel</h2>
+          <p id="inviteSub"></p>
+        </div>
+        <button class="x" data-close>&times;</button>
+      </div>
+      <div class="modal-body" id="inviteList"></div>
+    </div>
+  </div>
+
+  <div class="toasts" id="toasts"></div>
+
+  <!-- ============================================================
+       APP LOGIC
+  ============================================================= -->
+  <script>
+  (function () {
+    const $ = (s, r=document) => r.querySelector(s);
+    const $$ = (s, r=document) => Array.from(r.querySelectorAll(s));
+    const alumniById = id => ALUMNI.find(a => a.id === id);
+    const left = a => Math.max(0, a.capacity - a.scheduled);
+    const uniq = key => [...new Set(ALUMNI.map(a => a[key]))].sort((x,y)=> String(x).localeCompare(String(y)));
+
+    // ---- Filter state ----
+    const F = { search:"", gradFrom:null, gradTo:null, minAccept:0, openOnly:false, verifiedOnly:false,
+      major:new Set(), industry:new Set(), field:new Set(), location:new Set(), engagement:new Set(), seniority:new Set(), topics:new Set() };
+
+    // ---- Request filter state ----
+    const RF = { search:"", sub:"new", rIndustry:new Set(), rField:new Set(), rAlumni:new Set() };
+
+    // ===== Multiselect builder =====
+    function buildMS(host, values, state, onChange) {
+      host.innerHTML =
+        '<button class="ms-btn" type="button">All</button>' +
+        '<div class="ms-panel">' + values.map(v =>
+          `<label class="ms-opt"><input type="checkbox" value="${String(v).replace(/"/g,'&quot;')}"> ${v}</label>`
+        ).join('') + '</div>';
+      const btn = $('.ms-btn', host);
+      btn.addEventListener('click', e => { e.stopPropagation(); closeAllMS(host); host.classList.toggle('open'); });
+      $('.ms-panel', host).addEventListener('click', e => e.stopPropagation()); // keep panel open while picking
+      $$('.ms-opt input', host).forEach(inp => {
+        inp.addEventListener('change', () => {
+          inp.checked ? state.add(inp.value) : state.delete(inp.value);
+          const n = state.size;
+          btn.textContent = n === 0 ? 'All' : (n === 1 ? [...state][0] : n + ' selected');
+          btn.classList.toggle('has', n > 0);
+          onChange();
+        });
+      });
+      host._sync = () => {
+        $$('.ms-opt input', host).forEach(inp => inp.checked = state.has(inp.value));
+        const n = state.size;
+        btn.textContent = n === 0 ? 'All' : (n === 1 ? [...state][0] : n + ' selected');
+        btn.classList.toggle('has', n > 0);
+      };
+    }
+    function closeAllMS(except) { $$('.ms').forEach(m => { if (m !== except) m.classList.remove('open'); }); }
+    document.addEventListener('click', () => closeAllMS(null));
+
+    // ===== Directory filtering =====
+    function filterAlumni() {
+      const q = F.search.trim().toLowerCase();
+      return ALUMNI.filter(a => {
+        if (q && !(`${a.name} ${a.company} ${a.role} ${a.major}`.toLowerCase().includes(q))) return false;
+        if (F.gradFrom && a.grad < F.gradFrom) return false;
+        if (F.gradTo && a.grad > F.gradTo) return false;
+        if (F.minAccept && a.acceptance < F.minAccept) return false;
+        if (F.openOnly && left(a) <= 0) return false;
+        if (F.verifiedOnly && !a.linkedin) return false;
+        if (F.major.size && !F.major.has(a.major)) return false;
+        if (F.industry.size && !F.industry.has(a.industry)) return false;
+        if (F.field.size && !F.field.has(a.field)) return false;
+        if (F.location.size && !F.location.has(a.location)) return false;
+        if (F.engagement.size && !F.engagement.has(a.engagement)) return false;
+        if (F.seniority.size && !F.seniority.has(a.seniority)) return false;
+        if (F.topics.size && !a.topics.some(t => F.topics.has(t))) return false;
+        return true;
+      });
+    }
+
+    function capCell(a) {
+      const l = left(a), pct = a.capacity ? Math.round((a.scheduled / a.capacity) * 100) : 0;
+      const full = l <= 0;
+      return `<div class="cap ${full?'full':''}">
+        <span class="cap-txt ${full?'cap-full':'cap-open'}">${full ? 'At capacity' : l + ' of ' + a.capacity + ' open'}</span>
+        <div class="meter"><i style="width:${pct}%"></i></div>
+      </div>`;
+    }
+
+    function renderAlumni() {
+      const list = filterAlumni();
+      $('#dirCount').textContent = list.length + (list.length === 1 ? ' alumni' : ' alumni');
+      const host = $('#alumniRows');
+      if (!list.length) {
+        host.innerHTML = `<div class="empty"><h3>No alumni match those filters</h3><p>Try removing a filter to widen the search.</p></div>`;
+        renderChips(); return;
+      }
+      host.innerHTML = list.map(a => `
+        <div class="arow">
+          <div class="ident cell">
+            <div class="av">${initials(a.name)}</div>
+            <div style="min-width:0">
+              <div class="nm">${a.name}</div>
+              <div class="sub">Class of ${a.grad} &middot; ${a.major}</div>
+            </div>
+          </div>
+          <div class="role cell">
+            <div class="r-title">${a.role}, ${a.company}</div>
+            <div class="r-ind">${a.industry} &middot; ${a.field}</div>
+          </div>
+          <div class="cell-loc cell" data-label="Location">${a.location}</div>
+          <div class="cell" data-label="Engagement"><span class="badge-eng eng-${a.engagement}">${a.engagement}</span></div>
+          <div class="cell-cap cell" data-label="Capacity">${capCell(a)}</div>
+          <div class="cell" data-label="Acceptance"><div class="accept">${a.acceptance}%<small>ACCEPT</small></div></div>
+          <div class="row-actions cell">
+            ${a.linkedin
+              ? `<a class="li-btn verified" href="${a.url}" target="_blank" rel="noopener">${liIcon()} LinkedIn</a>`
+              : `<span class="li-btn locked" title="Alumni has not completed LinkedIn onboarding">${liIcon()} Not linked</span>`}
+            <button class="li-btn" data-profile="${a.id}">View profile</button>
+          </div>
+        </div>`).join('');
+      $$('[data-profile]', host).forEach(b => b.addEventListener('click', () => openProfile(+b.dataset.profile)));
+      renderChips();
+    }
+
+    function renderChips() {
+      const items = [];
+      if (F.search) items.push(['search', 'Search: ' + F.search]);
+      if (F.gradFrom) items.push(['gradFrom', 'From ' + F.gradFrom]);
+      if (F.gradTo) items.push(['gradTo', 'To ' + F.gradTo]);
+      if (F.minAccept) items.push(['minAccept', 'Accept ≥ ' + F.minAccept + '%']);
+      if (F.openOnly) items.push(['openOnly', 'Open spots']);
+      if (F.verifiedOnly) items.push(['verifiedOnly', 'LinkedIn verified']);
+      ['major','industry','field','location','engagement','seniority','topics'].forEach(k => {
+        F[k].forEach(v => items.push([k + '::' + v, v]));
+      });
+      const host = $('#chips');
+      host.innerHTML = items.map(([key,label]) =>
+        `<span class="chip">${label}<button data-chip="${key}" aria-label="Remove">&times;</button></span>`).join('');
+      $$('[data-chip]', host).forEach(b => b.addEventListener('click', () => removeChip(b.dataset.chip)));
+      updateFilterButton();
+    }
+
+    function removeChip(key) {
+      if (key === 'search') { F.search = ''; $('#fSearch').value = ''; }
+      else if (key === 'gradFrom') { F.gradFrom = null; $('#fGradFrom').value = ''; }
+      else if (key === 'gradTo') { F.gradTo = null; $('#fGradTo').value = ''; }
+      else if (key === 'minAccept') { F.minAccept = 0; $('#fAccept').value = 0; $('#fAcceptVal').textContent = '0%'; }
+      else if (key === 'openOnly') { F.openOnly = false; $('#fOpen').checked = false; }
+      else if (key === 'verifiedOnly') { F.verifiedOnly = false; $('#fVerified').checked = false; }
+      else {
+        const [k, v] = key.split('::');
+        F[k].delete(v);
+        const host = $(`[data-ms="${k}"]`);
+        if (host && host._sync) host._sync();
+      }
+      renderAlumni();
+    }
+
+    // ===== Profile modal =====
+    function openProfile(id) {
+      const a = alumniById(id); if (!a) return;
+      $('#profName').textContent = a.name;
+      $('#profRole').textContent = `${a.role}, ${a.company}`;
+      const l = left(a);
+      $('#profBody').innerHTML = `
+        <div class="prof-grid">
+          <div class="pf"><div class="pl">Graduation</div><div class="pv">Class of ${a.grad}</div></div>
+          <div class="pf"><div class="pl">Major</div><div class="pv">${a.major}</div></div>
+          <div class="pf"><div class="pl">Industry</div><div class="pv">${a.industry}</div></div>
+          <div class="pf"><div class="pl">Post-grad field</div><div class="pv">${a.field}</div></div>
+          <div class="pf"><div class="pl">Location</div><div class="pv">${a.location}</div></div>
+          <div class="pf"><div class="pl">Seniority</div><div class="pv">${a.seniority}</div></div>
+          <div class="pf"><div class="pl">Engagement</div><div class="pv"><span class="badge-eng eng-${a.engagement}">${a.engagement}</span></div></div>
+          <div class="pf"><div class="pl">Acceptance rate</div><div class="pv">${a.acceptance}%</div></div>
+          <div class="pf"><div class="pl">Capacity this month</div><div class="pv">${l} of ${a.capacity} open</div></div>
+          <div class="pf"><div class="pl">LinkedIn</div><div class="pv">${a.linkedin ? `<a href="${a.url}" target="_blank" rel="noopener" style="color:var(--green);font-weight:600;text-decoration:none;">View profile</a>` : 'Not onboarded'}</div></div>
+        </div>
+        <div style="margin-top:16px;">
+          <div class="pl" style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:0.3px;color:var(--muted);">Can speak to</div>
+          <div class="topic-chips">${a.topics.map(t => `<span>${t}</span>`).join('')}</div>
+        </div>`;
+      openOverlay('#profileOverlay');
+    }
+
+    // ===== Requests =====
+    function reqCounts() {
+      return {
+        new: REQUESTS.filter(r => r.status === 'new').length,
+        pending: REQUESTS.filter(r => r.status === 'pending').length,
+        connected: REQUESTS.filter(r => r.status === 'connected').length,
+        archived: REQUESTS.filter(r => r.status === 'archived').length
+      };
+    }
+
+    function filterRequests() {
+      const q = RF.search.trim().toLowerCase();
+      return REQUESTS.filter(r => {
+        if (r.status !== RF.sub) return false;
+        if (q && !(`${r.student} ${r.note}`.toLowerCase().includes(q))) return false;
+        if (RF.rIndustry.size && !RF.rIndustry.has(r.industry)) return false;
+        if (RF.rField.size && !RF.rField.has(r.field)) return false;
+        if (RF.rAlumni.size) {
+          const a = r.alumniId ? alumniById(r.alumniId) : null;
+          if (!a || !RF.rAlumni.has(a.name)) return false;
+        }
+        return true;
+      });
+    }
+
+    function fmtDate(d) {
+      if (!d) return '';
+      const dt = new Date(d + 'T00:00:00');
+      return dt.toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
+    }
+    function daysAgo(d) {
+      const ms = Date.now() - new Date(d + 'T00:00:00').getTime();
+      const days = Math.floor(ms / 86400000);
+      return days <= 0 ? 'today' : days === 1 ? '1 day ago' : days + ' days ago';
+    }
+
+    function renderRequests() {
+      const c = reqCounts();
+      $('#ctNew').textContent = c.new; $('#ctPending').textContent = c.pending; $('#ctConnected').textContent = c.connected; $('#ctArchived').textContent = c.archived;
+      $('#navReqBadge').textContent = c.new;
+      $('#navReqBadge').style.display = c.new ? 'flex' : 'none';
+
+      const list = filterRequests();
+      const host = $('#requestList');
+      if (!list.length) {
+        const msg = RF.sub === 'new' ? 'No new requests right now.'
+          : RF.sub === 'pending' ? 'Nothing is waiting on an alumni reply.'
+          : RF.sub === 'archived' ? 'Nothing archived.'
+          : 'No connections yet.';
+        host.innerHTML = `<div class="empty"><h3>All clear</h3><p>${msg}</p></div>`;
+        return;
+      }
+
+      host.innerHTML = list.map(r => {
+        if (r.status === 'new') {
+          return `<div class="rcard">
+            <div class="r-top">
+              <div class="stu">
+                <div class="av">${r.init}</div>
+                <div>
+                  <div class="s-name">${r.student}</div>
+                  <div class="s-want">Wants a chat about <b>${r.field}</b> in <b>${r.industry}</b></div>
+                </div>
+              </div>
+              <div class="r-actions">
+                <button class="btn primary" data-assign="${r.id}">Assign alumni</button>
+              </div>
+            </div>
+            <div class="r-note">${r.note}</div>
+            <div class="r-date">Requested ${daysAgo(r.date)}</div>
+          </div>`;
+        }
+        const a = alumniById(r.alumniId);
+        const stat = r.status === 'pending'
+          ? `<span class="status-pill st-pending">Awaiting alumni reply</span>`
+          : r.status === 'connected'
+          ? `<span class="status-pill st-connected">Connected</span>`
+          : `<span class="status-pill st-archived">Archived</span>`;
+        const actions = r.status === 'pending'
+          ? `<button class="btn sm" data-reassign="${r.id}">Reassign</button>
+             <button class="btn danger sm" data-archive="${r.id}">Archive</button>`
+          : r.status === 'connected'
+          ? `<button class="btn sm" data-profile2="${r.alumniId}">View alumni</button>`
+          : `<button class="btn sm" data-reopen="${r.id}">Reopen</button>
+             <button class="btn ghost sm" data-profile2="${r.alumniId}">View alumni</button>`;
+        const stampDate = r.status === 'connected' ? fmtDate(r.connected) : r.status === 'archived' ? fmtDate(r.archived) : fmtDate(r.sent);
+        const stampLabel = r.status === 'connected' ? 'connected' : r.status === 'archived' ? 'archived' : 'invite sent';
+        return `<div class="rcard">
+          <div class="r-top">
+            <div class="stu">
+              <div class="av">${r.init}</div>
+              <div>
+                <div class="s-name">${r.student}</div>
+                <div class="s-want"><b>${r.field}</b> in <b>${r.industry}</b></div>
+              </div>
+            </div>
+            <div style="display:flex;align-items:center;gap:10px;flex-wrap:wrap;">${stat}</div>
+          </div>
+          <div class="matchline">
+            <div class="node stu-node"><div class="av">${r.init}</div><div style="min-width:0"><div class="nn">${r.student}</div><div class="mm">Student</div></div></div>
+            <div class="conn">${arrowIcon()}</div>
+            <div class="node alum-node"><div class="av">${initials(a.name)}</div><div style="min-width:0"><div class="nn">${a.name}</div><div class="mm">${a.role}, ${a.company}</div></div></div>
+          </div>
+          <div class="alum-stats">
+            <div class="as"><b>${a.capacity}</b>allotted / month</div>
+            <div class="as"><b>${left(a)}</b>spots left</div>
+            <div class="as"><b>${a.acceptance}%</b>acceptance rate</div>
+            <div class="as"><b>${stampDate}</b>${stampLabel}</div>
+          </div>
+          <div class="r-actions" style="margin-top:14px;justify-content:flex-end;">${actions}</div>
+        </div>`;
+      }).join('');
+
+      $$('[data-assign]', host).forEach(b => b.addEventListener('click', () => openAssign(b.dataset.assign)));
+      $$('[data-reassign]', host).forEach(b => b.addEventListener('click', () => openAssign(b.dataset.reassign, true)));
+      $$('[data-archive]', host).forEach(b => b.addEventListener('click', () => archiveRequest(b.dataset.archive)));
+      $$('[data-reopen]', host).forEach(b => b.addEventListener('click', () => reopenRequest(b.dataset.reopen)));
+      $$('[data-profile2]', host).forEach(b => b.addEventListener('click', () => openProfile(+b.dataset.profile2)));
+    }
+
+    // ===== Assign flow =====
+    let assignReqId = null, chosenAlumniId = null, assignIsReassign = false;
+    const candIndustrySet = new Set();
+
+    function openAssign(reqId, isReassign) {
+      assignReqId = reqId; chosenAlumniId = null; assignIsReassign = !!isReassign;
+      const r = REQUESTS.find(x => x.id === reqId);
+      $('#assignTitle').textContent = (isReassign ? 'Reassign ' + r.student : 'Assign an alumni to ' + r.student);
+      $('#assignSub').textContent = isReassign
+        ? `Pick a different alumni for ${r.field} in ${r.industry}`
+        : `Requesting ${r.field} in ${r.industry}`;
+      $('#assignStep1').style.display = ''; $('#assignStep2').style.display = 'none';
+      $('#candSearch').value = ''; $('#candOpenOnly').checked = true; $('#candMatch').checked = true; $('#candSort').value = 'match';
+      candIndustrySet.clear();
+      const ci = $('[data-ms="candIndustry"]'); if (ci && ci._sync) ci._sync();
+      renderCandidates();
+      openOverlay('#assignOverlay');
+    }
+
+    function renderCandidates() {
+      const r = REQUESTS.find(x => x.id === assignReqId);
+      const q = $('#candSearch').value.trim().toLowerCase();
+      const openOnly = $('#candOpenOnly').checked;
+      const matchOnly = $('#candMatch').checked;
+      const sort = $('#candSort').value;
+      let cands = matchOnly ? ALUMNI.filter(a => a.industry === r.industry || a.field === r.field) : ALUMNI.slice();
+      cands = cands.filter(a => a.id !== r.alumniId); // exclude the currently assigned (unresponsive) alumni on reassign
+      if (candIndustrySet.size) cands = cands.filter(a => candIndustrySet.has(a.industry));
+      if (q) cands = cands.filter(a => `${a.name} ${a.company} ${a.role}`.toLowerCase().includes(q));
+      if (openOnly) cands = cands.filter(a => left(a) > 0);
+      cands.sort((x, y) => {
+        if (sort === 'open') return (left(y) - left(x)) || (y.acceptance - x.acceptance);
+        if (sort === 'accept') return y.acceptance - x.acceptance;
+        if (sort === 'name') return x.name.localeCompare(y.name);
+        if (sort === 'grad') return y.grad - x.grad;
+        return ((left(y) > 0) - (left(x) > 0)) || (left(y) - left(x)) || (y.acceptance - x.acceptance); // best match
+      });
+      $('#candCount').textContent = cands.length + (cands.length === 1 ? ' alumni' : ' alumni');
+      const host = $('#candList');
+      if (!cands.length) {
+        host.innerHTML = `<div class="empty" style="padding:28px 10px;"><p>No alumni match. Try widening the filters or turning off "Matches this request".</p></div>`;
+        return;
+      }
+      host.innerHTML = cands.map(a => {
+        const l = left(a), full = l <= 0;
+        return `<div class="cand ${full?'full':''}">
+          <div class="av">${initials(a.name)}</div>
+          <div class="c-main">
+            <div class="c-name">${a.name}</div>
+            <div class="c-meta">${a.role}, ${a.company} &middot; ${a.field}</div>
+          </div>
+          <div class="c-cap"><b>${full ? 'Full' : l + ' open'}</b>${a.acceptance}% accept</div>
+          <button class="btn primary sm" data-pick="${a.id}" ${full?'disabled':''}>Select</button>
+        </div>`;
+      }).join('');
+      $$('[data-pick]', host).forEach(b => b.addEventListener('click', () => pickAlumni(+b.dataset.pick)));
+    }
+
+    function pickAlumni(id) {
+      chosenAlumniId = id;
+      const a = alumniById(id), r = REQUESTS.find(x => x.id === assignReqId);
+      $('#emailTo').innerHTML = `<b>${a.name}</b> &lt;${a.email}&gt;`;
+      $('#emailSubject').value = `A student would like to connect with you, ${a.name.split(' ')[0]}`;
+      $('#emailBody').value =
+`Hi ${a.name.split(' ')[0]},
+
+One of our students, ${r.student}, has asked to set up a short coffee chat about ${r.field} in ${r.industry}. Based on your background we thought you would be a great person for them to talk to.
+
+You have ${left(a)} of your ${a.capacity} coffee chats open this month. If you are happy to take this one, just reply to this email and we will introduce you both and help schedule a time.
+
+Thank you for giving back to our students.
+
+Alumni Relations
+Career Services`;
+      $('#assignStep1').style.display = 'none'; $('#assignStep2').style.display = '';
+    }
+
+    function sendInvite() {
+      const r = REQUESTS.find(x => x.id === assignReqId);
+      const a = alumniById(chosenAlumniId);
+      r.status = 'pending'; r.alumniId = a.id; r.sent = todayISO(); r.archived = null;
+      closeOverlay('#assignOverlay');
+      toast((assignIsReassign ? 'Reassigned to ' : 'Invitation sent to ') + a.name, true);
+      RF.sub = 'pending'; syncSubtabs();
+      renderRequests(); renderOverview();
+    }
+
+    function archiveRequest(id) {
+      const r = REQUESTS.find(x => x.id === id);
+      r.status = 'archived'; r.archived = todayISO();
+      toast('Request archived');
+      renderRequests(); renderOverview();
+    }
+
+    function reopenRequest(id) {
+      const r = REQUESTS.find(x => x.id === id);
+      r.status = 'new'; r.alumniId = null; r.sent = null; r.archived = null;
+      toast('Moved back to new requests');
+      RF.sub = 'new'; syncSubtabs();
+      renderRequests(); renderOverview();
+    }
+
+    // ===== Overview =====
+    function renderOverview() {
+      const c = reqCounts();
+      const active = ALUMNI.filter(a => a.capacity > 0).length;
+      const openSpots = ALUMNI.reduce((s,a) => s + left(a), 0);
+      const avgAccept = Math.round(ALUMNI.reduce((s,a) => s + a.acceptance, 0) / ALUMNI.length);
+      $('#kpis').innerHTML = `
+        <div class="kpi"><div class="k-label">Alumni in network</div><div class="k-num">${ALUMNI.length}</div><div class="k-sub">${active} taking chats this month</div></div>
+        <div class="kpi accent"><div class="k-label">New requests</div><div class="k-num">${c.new}</div><div class="k-sub">waiting to be assigned</div></div>
+        <div class="kpi"><div class="k-label">Awaiting reply</div><div class="k-num">${c.pending}</div><div class="k-sub">invitations sent</div></div>
+        <div class="kpi"><div class="k-label">Open chat spots</div><div class="k-num">${openSpots}</div><div class="k-sub">across the network</div></div>
+        <div class="kpi"><div class="k-label">Panel opt-ins</div><div class="k-num">${OPTINS.length}</div><div class="k-sub">${PANELS.filter(p=>p.status!=='completed').length} panels upcoming</div></div>
+        <div class="kpi"><div class="k-label">Avg acceptance</div><div class="k-num">${avgAccept}%</div><div class="k-sub">alumni who say yes</div></div>`;
+
+      const waiting = REQUESTS.filter(r => r.status === 'new').sort((a,b) => new Date(a.date) - new Date(b.date)).slice(0,4);
+      $('#attentionList').innerHTML = waiting.length ? waiting.map(r => `
+        <div class="att-row">
+          <div class="a-main"><div class="a-name">${r.student}</div><div class="a-meta">${r.field} in ${r.industry}</div></div>
+          <span class="a-age">${daysAgo(r.date)}</span>
+        </div>`).join('') : `<div class="empty" style="padding:24px 0;"><p>No new requests waiting.</p></div>`;
+
+      const top = [...ALUMNI].sort((a,b) => b.acceptance - a.acceptance).slice(0,4);
+      $('#topAlumni').innerHTML = top.map(a => `
+        <div class="att-row">
+          <div class="a-main"><div class="a-name">${a.name}</div><div class="a-meta">${a.role}, ${a.company}</div></div>
+          <span class="a-age" style="color:var(--green);background:var(--green-tint);">${a.acceptance}%</span>
+        </div>`).join('');
+    }
+
+    // ===== Helpers =====
+    function initials(name) { return name.split(' ').map(p => p[0]).slice(0,2).join('').toUpperCase(); }
+    function todayISO() { return new Date().toISOString().slice(0,10); }
+    function liIcon() { return '<svg viewBox="0 0 24 24" fill="currentColor"><path d="M4.98 3.5a2.5 2.5 0 1 1 0 5 2.5 2.5 0 0 1 0-5ZM3 9h4v12H3V9Zm6 0h3.8v1.7h.05c.53-.95 1.8-1.95 3.7-1.95 3.96 0 4.7 2.4 4.7 5.5V21h-4v-5.3c0-1.26-.02-2.9-1.77-2.9-1.77 0-2.04 1.38-2.04 2.8V21H9V9Z"/></svg>'; }
+    function arrowIcon() { return '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg>'; }
+    function checkIcon() { return '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg>'; }
+
+    let toastTimer;
+    function toast(msg, ok) {
+      const host = $('#toasts');
+      const el = document.createElement('div');
+      el.className = 'toast';
+      el.innerHTML = (ok ? checkIcon() : '') + '<span>' + msg + '</span>';
+      host.appendChild(el);
+      setTimeout(() => { el.style.opacity = '0'; el.style.transform = 'translateY(8px)'; setTimeout(() => el.remove(), 250); }, 2600);
+    }
+
+    // ===== Overlay control =====
+    function openOverlay(sel) { $(sel).classList.add('open'); document.body.style.overflow = 'hidden'; }
+    function closeOverlay(sel) { $(sel).classList.remove('open'); document.body.style.overflow = ''; }
+    $$('.overlay').forEach(ov => {
+      ov.addEventListener('click', e => { if (e.target === ov) closeOverlay('#' + ov.id); });
+      $$('[data-close]', ov).forEach(b => b.addEventListener('click', () => closeOverlay('#' + ov.id)));
+    });
+    document.addEventListener('keydown', e => { if (e.key === 'Escape') $$('.overlay.open').forEach(o => closeOverlay('#' + o.id)); });
+
+    // ===== View switching =====
+    function switchView(view) {
+      $$('.nav-item').forEach(n => n.classList.toggle('active', n.dataset.view === view));
+      $$('.view').forEach(v => v.classList.toggle('active', v.id === 'view-' + view));
+      closeSidebar();
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+    $$('.nav-item').forEach(n => n.addEventListener('click', () => switchView(n.dataset.view)));
+    $$('[data-go]').forEach(a => a.addEventListener('click', () => switchView(a.dataset.go)));
+
+    // ===== Subtabs =====
+    function syncSubtabs() { $$('#view-requests .subtab').forEach(t => t.classList.toggle('active', t.dataset.sub === RF.sub)); }
+    $$('#view-requests .subtab').forEach(t => t.addEventListener('click', () => { RF.sub = t.dataset.sub; syncSubtabs(); renderRequests(); }));
+
+    // ===== Mobile sidebar =====
+    function openSidebar() { $('#sidebar').classList.add('open'); $('#scrim').classList.add('show'); }
+    function closeSidebar() { $('#sidebar').classList.remove('open'); $('#scrim').classList.remove('show'); }
+    $('#hamburger').addEventListener('click', () => {
+      $('#sidebar').classList.contains('open') ? closeSidebar() : openSidebar();
+    });
+    $('#scrim').addEventListener('click', closeSidebar);
+    $('#sideClose').addEventListener('click', closeSidebar);
+    document.addEventListener('keydown', e => { if (e.key === 'Escape') closeSidebar(); });
+
+    // ===== Wire directory controls =====
+    function initFilters() {
+      const years = uniq('grad');
+      const minY = Math.min(...years), maxY = Math.max(...years);
+      const optBlank = '<option value="">Any</option>';
+      $('#fGradFrom').innerHTML = optBlank + years.map(y => `<option value="${y}">${y}</option>`).join('');
+      $('#fGradTo').innerHTML = optBlank + years.map(y => `<option value="${y}">${y}</option>`).join('');
+
+      $('#fSearch').addEventListener('input', e => { F.search = e.target.value; renderAlumni(); });
+      $('#fGradFrom').addEventListener('change', e => { F.gradFrom = e.target.value ? +e.target.value : null; renderAlumni(); });
+      $('#fGradTo').addEventListener('change', e => { F.gradTo = e.target.value ? +e.target.value : null; renderAlumni(); });
+      $('#fAccept').addEventListener('input', e => { F.minAccept = +e.target.value; $('#fAcceptVal').textContent = e.target.value + '%'; renderAlumni(); });
+      $('#fOpen').addEventListener('change', e => { F.openOnly = e.target.checked; renderAlumni(); });
+      $('#fVerified').addEventListener('change', e => { F.verifiedOnly = e.target.checked; renderAlumni(); });
+
+      buildMS($('[data-ms="major"]'), uniq('major'), F.major, renderAlumni);
+      buildMS($('[data-ms="industry"]'), uniq('industry'), F.industry, renderAlumni);
+      buildMS($('[data-ms="field"]'), uniq('field'), F.field, renderAlumni);
+      buildMS($('[data-ms="location"]'), uniq('location'), F.location, renderAlumni);
+      buildMS($('[data-ms="engagement"]'), ['High','Medium','Low'], F.engagement, renderAlumni);
+      buildMS($('[data-ms="seniority"]'), ['Junior','Mid','Senior'], F.seniority, renderAlumni);
+      buildMS($('[data-ms="topics"]'), [...new Set(ALUMNI.flatMap(a => a.topics))].sort(), F.topics, renderAlumni);
+
+      $('#clearFilters').addEventListener('click', () => {
+        F.search=''; F.gradFrom=null; F.gradTo=null; F.minAccept=0; F.openOnly=false; F.verifiedOnly=false;
+        ['major','industry','field','location','engagement','seniority','topics'].forEach(k => F[k].clear());
+        $('#fSearch').value=''; $('#fGradFrom').value=''; $('#fGradTo').value=''; $('#fAccept').value=0; $('#fAcceptVal').textContent='0%';
+        $('#fOpen').checked=false; $('#fVerified').checked=false;
+        $$('.ms').forEach(m => { if (m._sync) m._sync(); });
+        renderAlumni();
+      });
+
+      $('#toggleFilters').addEventListener('click', () => {
+        $('#filterRail').classList.contains('open') ? closeFilters() : openFilters();
+      });
+      $('#closeFilters').addEventListener('click', closeFilters);
+      $('#filterScrim').addEventListener('click', closeFilters);
+      document.addEventListener('keydown', e => { if (e.key === 'Escape') closeFilters(); });
+    }
+
+    function openFilters() { $('#filterRail').classList.add('open'); $('#filterScrim').classList.add('show'); }
+    function closeFilters() { $('#filterRail').classList.remove('open'); $('#filterScrim').classList.remove('show'); }
+
+    function activeFilterCount() {
+      let n = 0;
+      if (F.search) n++; if (F.gradFrom) n++; if (F.gradTo) n++;
+      if (F.minAccept) n++; if (F.openOnly) n++; if (F.verifiedOnly) n++;
+      ['major','industry','field','location','engagement','seniority','topics'].forEach(k => n += F[k].size);
+      return n;
+    }
+    function updateFilterButton() {
+      const n = activeFilterCount();
+      $('#toggleFilters').innerHTML =
+        '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M3 5h18M6 12h12M10 19h4"/></svg> Filters' +
+        (n ? ' <span class="fcount">' + n + '</span>' : '');
+      $('#toggleFilters').classList.toggle('primary', n > 0);
+    }
+
+    // ===== Wire request controls =====
+    function initRequestFilters() {
+      $('#rSearch').addEventListener('input', e => { RF.search = e.target.value; renderRequests(); });
+      buildMS($('[data-ms="rIndustry"]'), uniq('industry'), RF.rIndustry, renderRequests);
+      buildMS($('[data-ms="rField"]'), uniq('field'), RF.rField, renderRequests);
+      buildMS($('[data-ms="rAlumni"]'), ALUMNI.map(a => a.name).sort(), RF.rAlumni, renderRequests);
+      $('#candSearch').addEventListener('input', renderCandidates);
+      $('#candOpenOnly').addEventListener('change', renderCandidates);
+      $('#candMatch').addEventListener('change', renderCandidates);
+      $('#candSort').addEventListener('change', renderCandidates);
+      buildMS($('[data-ms="candIndustry"]'), uniq('industry'), candIndustrySet, renderCandidates);
+      $('#emailBack').addEventListener('click', () => { $('#assignStep2').style.display='none'; $('#assignStep1').style.display=''; });
+      $('#emailSend').addEventListener('click', sendInvite);
+    }
+
+    // ===== Other engagements =====
+    const EVENTS = { panels: PANELS, guest_lectures: LECTURES };
+    const EVENT_CFG = {
+      panels:         { one:"panel",         members:"panelists", newTitle:"New panel",          titleLabel:"Panel title",      titlePh:"e.g. Breaking Into Tech",       seatLabel:"Panelists", defSeats:4, emptyNew:"No panels yet." },
+      guest_lectures: { one:"guest lecture", members:"speakers",  newTitle:"New guest lecture",  titleLabel:"Class or course",  titlePh:"e.g. Intro to Marketing guest session", seatLabel:"Speakers",  defSeats:1, emptyNew:"No guest lectures yet." }
+    };
+    const EF = { esub: 'pool', search: '', engType: new Set(), format: new Set(), topic: new Set(), industry: new Set() };
+    const fmtLabel = f => f === 'in_person' ? 'In person' : f === 'zoom' ? 'Zoom' : 'Either';
+    const allOptinTopics = () => [...new Set(OPTINS.flatMap(o => o.topics))].sort();
+    const typeName = id => (ENGAGEMENT_TYPES.find(t => t.id === id) || {}).name || id;
+    const eventById = (type, id) => EVENTS[type].find(e => e.id === id);
+    const plusSvg = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg>';
+
+    function renderEngTypes() {
+      $('#engTypes').innerHTML = ENGAGEMENT_TYPES.map(t => {
+        const count = t.active ? OPTINS.filter(o => o.type === t.id).length : 0;
+        return `<div class="eng-type ${t.active ? '' : 'soon'}">
+          <div class="et-top">
+            <span class="et-name">${t.name}</span>
+            <span class="et-status ${t.active ? 'et-active' : 'et-soon'}">${t.active ? 'Active' : 'Coming soon'}</span>
+          </div>
+          <div class="et-desc">${t.desc}</div>
+          <div class="et-count">${t.active ? count : '—'}${t.active ? '<small>opted in</small>' : ''}</div>
+        </div>`;
+      }).join('');
+    }
+
+    function renderEngagements() {
+      $('#ctPool').textContent = OPTINS.length;
+      $('#ctPanels').textContent = PANELS.length;
+      $('#ctLectures').textContent = LECTURES.length;
+      const upcoming = [...PANELS, ...LECTURES].filter(e => e.status !== 'completed').length;
+      $('#navEngBadge').textContent = upcoming;
+      $('#navEngBadge').style.display = upcoming ? 'flex' : 'none';
+
+      const isPool = EF.esub === 'pool';
+      $('#poolFilters').style.display = isPool ? '' : 'none';
+      $('#panelsToolbar').style.display = isPool ? 'none' : 'flex';
+      if (!isPool) $('#newPanelBtn').innerHTML = plusSvg + ' ' + EVENT_CFG[EF.esub].newTitle;
+      isPool ? renderPool() : renderEvents(EF.esub);
+    }
+
+    function renderPool() {
+      const q = EF.search.trim().toLowerCase();
+      let list = OPTINS.map(o => ({ o, a: alumniById(o.alumniId) })).filter(x => x.a);
+      list = list.filter(({ o, a }) => {
+        if (q && !(`${a.name} ${a.company} ${o.topics.join(' ')}`.toLowerCase().includes(q))) return false;
+        if (EF.engType.size && !EF.engType.has(typeName(o.type))) return false;
+        if (EF.format.size && !EF.format.has(fmtLabel(o.format))) return false;
+        if (EF.topic.size && !o.topics.some(t => EF.topic.has(t))) return false;
+        if (EF.industry.size && !EF.industry.has(a.industry)) return false;
+        return true;
+      });
+      const host = $('#engList');
+      if (!list.length) { host.innerHTML = `<div class="empty"><h3>No alumni match</h3><p>Try clearing a filter.</p></div>`; return; }
+      host.innerHTML = `<div class="pool-grid">` + list.map(({ o, a }) => `
+        <div class="poolcard">
+          <div class="pc-top">
+            <div class="av">${initials(a.name)}</div>
+            <div style="min-width:0">
+              <div class="pc-name">${a.name}</div>
+              <div class="pc-sub">${a.role}, ${a.company}</div>
+            </div>
+          </div>
+          <div class="pc-row">
+            <span class="et-status et-active">${typeName(o.type)}</span>
+            <span class="fmt-badge fmt-${o.format}">${fmtLabel(o.format)}</span>
+            <span class="pc-label" style="margin-left:4px;">${a.industry}</span>
+          </div>
+          <div class="pc-row" style="margin-top:10px;"><span class="pc-label">Can speak on</span></div>
+          <div class="topic-chips">${o.topics.map(t => `<span>${t}</span>`).join('')}</div>
+          <div class="pc-foot">
+            <span class="pc-date">Opted in ${fmtDate(o.opted)}</span>
+            <button class="btn primary sm" data-invite-alumni="${a.id}" data-invite-type="${o.type}">Invite to ${EVENT_CFG[o.type].one}</button>
+          </div>
+        </div>`).join('') + `</div>`;
+      $$('[data-invite-alumni]', host).forEach(b => b.addEventListener('click', () => openInvite(+b.dataset.inviteAlumni, b.dataset.inviteType)));
+    }
+
+    function seatInfo(e) { return { confirmed: e.panelists.filter(x => x.status === 'confirmed').length, total: e.seats }; }
+
+    function renderEvents(type) {
+      const cfg = EVENT_CFG[type], list = EVENTS[type], host = $('#engList');
+      if (!list.length) { host.innerHTML = `<div class="empty"><h3>${cfg.emptyNew}</h3><p>Create one to start inviting alumni.</p></div>`; return; }
+      host.innerHTML = list.map(e => {
+        const s = seatInfo(e);
+        const roster = e.panelists.length ? e.panelists.map(pl => {
+          const a = alumniById(pl.alumniId); if (!a) return '';
+          return `<div class="rost"><div class="av">${initials(a.name)}</div><span class="rn">${a.name}</span><span class="rs rs-${pl.status}">${pl.status}</span></div>`;
+        }).join('') : `<span class="none">No ${cfg.members} yet.</span>`;
+        return `<div class="pcard">
+          <div class="p-top">
+            <div>
+              <div class="p-title">${e.title}</div>
+              <div class="p-meta">
+                <span><b>${e.topic}</b></span>
+                <span class="fmt-badge fmt-${e.format}">${fmtLabel(e.format)}</span>
+                <span>${fmtDateFull(e.date)}</span>
+                <span>${e.location}</span>
+              </div>
+            </div>
+            <span class="pstat pstat-${e.status}">${e.status}</span>
+          </div>
+          <div class="roster">${roster}</div>
+          <div class="p-foot">
+            <span class="seats"><b>${s.confirmed}</b> of ${s.total} ${cfg.members} confirmed</span>
+            ${e.status === 'completed' ? '' : `<button class="btn forest sm" data-mtype="${type}" data-mid="${e.id}">Manage ${cfg.members}</button>`}
+          </div>
+        </div>`;
+      }).join('');
+      $$('[data-mid]', host).forEach(b => b.addEventListener('click', () => openManage(b.dataset.mtype, b.dataset.mid)));
+    }
+
+    function fmtDateFull(d) {
+      return new Date(d + 'T00:00:00').toLocaleDateString('en-US', { weekday: 'short', month: 'short', day: 'numeric', year: 'numeric' });
+    }
+
+    // Invite a single opted-in alumni to one of their event type's sessions (from the pool)
+    function openInvite(alumniId, type) {
+      const a = alumniById(alumniId), cfg = EVENT_CFG[type];
+      $('#inviteTitle').textContent = `Invite ${a.name} to a ${cfg.one}`;
+      $('#inviteSub').textContent = `Choose a ${cfg.one} to add them to as invited.`;
+      const open = EVENTS[type].filter(e => e.status !== 'completed');
+      $('#inviteList').innerHTML = open.length ? open.map(e => {
+        const already = e.panelists.some(x => x.alumniId === alumniId);
+        const s = seatInfo(e);
+        return `<div class="rost-manage">
+          <div class="rm-main">
+            <div class="rm-name">${e.title}</div>
+            <div class="rm-meta">${fmtLabel(e.format)} &middot; ${fmtDateFull(e.date)} &middot; ${s.confirmed} of ${s.total} confirmed</div>
+          </div>
+          <div class="rm-actions">
+            ${already ? `<span class="rs rs-invited" style="font-size:11px;padding:4px 10px;border-radius:999px;">Already added</span>`
+                      : `<button class="ibtn" data-add="${e.id}" data-type="${type}" data-al="${alumniId}">Invite</button>`}
+          </div>
+        </div>`;
+      }).join('') : `<div class="empty" style="padding:20px;"><p>No upcoming ${cfg.one}s. Create one first.</p></div>`;
+      $$('[data-add]', $('#inviteList')).forEach(b => b.addEventListener('click', () => {
+        const e = eventById(b.dataset.type, b.dataset.add);
+        e.panelists.push({ alumniId: +b.dataset.al, status: 'invited' });
+        closeOverlay('#inviteOverlay');
+        toast('Invited ' + a.name + ' to ' + e.title, true);
+        renderEngagements();
+      }));
+      openOverlay('#inviteOverlay');
+    }
+
+    // Manage members for an event
+    let manageState = { type: null, id: null };
+    const panelCandIndustrySet = new Set();
+    function openManage(type, id) {
+      manageState = { type, id };
+      const e = eventById(type, id), cfg = EVENT_CFG[type];
+      $('#manageTitle').textContent = 'Manage ' + cfg.members;
+      $('#manageSub').textContent = `${e.title} · ${fmtLabel(e.format)} · ${fmtDateFull(e.date)}`;
+      $('#rosterLabel').textContent = 'Current ' + cfg.members;
+      $('#panelCandSearch').value = ''; $('#panelCandSort').value = 'match'; $('#panelCandFormat').checked = true;
+      panelCandIndustrySet.clear();
+      const ci = $('[data-ms="panelCandIndustry"]'); if (ci && ci._sync) ci._sync();
+      renderManage();
+      openOverlay('#manageOverlay');
+    }
+
+    function renderManage() {
+      const { type } = manageState;
+      const e = eventById(type, manageState.id), cfg = EVENT_CFG[type];
+      const roster = $('#rosterList');
+      roster.innerHTML = e.panelists.length ? e.panelists.map(pl => {
+        const a = alumniById(pl.alumniId); if (!a) return '';
+        return `<div class="rost-manage">
+          <div class="av">${initials(a.name)}</div>
+          <div class="rm-main"><div class="rm-name">${a.name}</div><div class="rm-meta">${a.role}, ${a.company}</div></div>
+          <div class="rm-actions">
+            <span class="rs rs-${pl.status}" style="font-size:10px;padding:2px 8px;border-radius:999px;text-transform:uppercase;">${pl.status}</span>
+            ${pl.status !== 'confirmed' ? `<button class="ibtn" data-confirm="${pl.alumniId}">Confirm</button>` : ''}
+            <button class="ibtn danger" data-remove="${pl.alumniId}">Remove</button>
+          </div>
+        </div>`;
+      }).join('') : `<div class="rm-meta" style="padding:4px 2px 8px;color:var(--muted);font-size:13px;">No ${cfg.members} yet. Invite from the pool below.</div>`;
+
+      const q = $('#panelCandSearch').value.trim().toLowerCase();
+      const formatOnly = $('#panelCandFormat').checked;
+      const sort = $('#panelCandSort').value;
+      const onEvent = new Set(e.panelists.map(x => x.alumniId));
+      let cands = OPTINS.filter(o => o.type === type && !onEvent.has(o.alumniId))
+        .map(o => ({ o, a: alumniById(o.alumniId) })).filter(x => x.a);
+      if (formatOnly) cands = cands.filter(({ o }) => o.format === 'either' || e.format === o.format);
+      if (panelCandIndustrySet.size) cands = cands.filter(({ a }) => panelCandIndustrySet.has(a.industry));
+      if (q) cands = cands.filter(({ a, o }) => `${a.name} ${a.company} ${o.topics.join(' ')}`.toLowerCase().includes(q));
+      cands.sort((x, y) => {
+        if (sort === 'accept') return y.a.acceptance - x.a.acceptance;
+        if (sort === 'name') return x.a.name.localeCompare(y.a.name);
+        if (sort === 'grad') return y.a.grad - x.a.grad;
+        // best match: exact format match first, then acceptance
+        const xm = x.o.format === e.format ? 1 : 0, ym = y.o.format === e.format ? 1 : 0;
+        return (ym - xm) || (y.a.acceptance - x.a.acceptance);
+      });
+      $('#panelCandCount').textContent = cands.length + ' available';
+      const cl = $('#panelCandList');
+      cl.innerHTML = cands.length ? cands.map(({ o, a }) => `
+        <div class="rost-manage">
+          <div class="av">${initials(a.name)}</div>
+          <div class="rm-main"><div class="rm-name">${a.name}</div><div class="rm-meta">${a.role}, ${a.company} &middot; <span class="fmt-badge fmt-${o.format}" style="padding:1px 8px;">${fmtLabel(o.format)}</span></div></div>
+          <div class="rm-actions"><button class="ibtn" data-inv="${a.id}">Invite</button></div>
+        </div>`).join('') : `<div class="rm-meta" style="padding:6px 2px;color:var(--muted);font-size:13px;">No matching opted-in alumni. Try widening the filters.</div>`;
+
+      $$('[data-confirm]', roster).forEach(b => b.addEventListener('click', () => {
+        const pl = e.panelists.find(x => x.alumniId === +b.dataset.confirm); pl.status = 'confirmed';
+        toast('Confirmed ' + alumniById(pl.alumniId).name.split(' ')[0], true); renderManage(); renderEngagements();
+      }));
+      $$('[data-remove]', roster).forEach(b => b.addEventListener('click', () => {
+        e.panelists = e.panelists.filter(x => x.alumniId !== +b.dataset.remove);
+        renderManage(); renderEngagements();
+      }));
+      $$('[data-inv]', cl).forEach(b => b.addEventListener('click', () => {
+        e.panelists.push({ alumniId: +b.dataset.inv, status: 'invited' });
+        toast('Invited ' + alumniById(+b.dataset.inv).name.split(' ')[0], true); renderManage(); renderEngagements();
+      }));
+    }
+
+    // New event (panel or guest lecture)
+    let newEventType = 'panels';
+    function openNewEvent(type) {
+      newEventType = type;
+      const cfg = EVENT_CFG[type];
+      $('#panelModalTitle').textContent = cfg.newTitle;
+      $('#panelModalSub').textContent = `Create a ${cfg.one}, then invite alumni from the opt-in pool.`;
+      $('#pfTitleLabel').textContent = cfg.titleLabel;
+      $('#pfTitle').placeholder = cfg.titlePh;
+      $('#pfSeatsLabel').textContent = cfg.seatLabel;
+      $('#pfTitle').value = ''; $('#pfTopic').value = ''; $('#pfFormat').value = 'in_person';
+      $('#pfDate').value = ''; $('#pfSeats').value = cfg.defSeats; $('#pfLocation').value = '';
+      syncPanelLocLabel();
+      openOverlay('#panelOverlay');
+    }
+    function syncPanelLocLabel() {
+      const zoom = $('#pfFormat').value === 'zoom';
+      $('#pfLocLabel').textContent = zoom ? 'Zoom link (optional)' : 'Location';
+      $('#pfLocation').placeholder = zoom ? 'Paste a Zoom link or leave blank' : 'Room or building';
+    }
+    function createEvent() {
+      const type = newEventType, cfg = EVENT_CFG[type];
+      const title = $('#pfTitle').value.trim();
+      if (!title) { toast('Add a title first'); return; }
+      const format = $('#pfFormat').value;
+      const loc = $('#pfLocation').value.trim() || (format === 'zoom' ? 'Zoom (link sent on confirm)' : 'Location TBD');
+      EVENTS[type].unshift({
+        id: type[0] + Date.now(), title, topic: $('#pfTopic').value.trim() || 'General',
+        date: $('#pfDate').value || todayISO(), format, location: loc,
+        seats: Math.max(1, +$('#pfSeats').value || cfg.defSeats), status: 'planning', panelists: []
+      });
+      closeOverlay('#panelOverlay');
+      toast(cfg.newTitle.replace('New ', '').replace(/^./, c => c.toUpperCase()) + ' created: ' + title, true);
+      EF.esub = type; syncEngSubtabs(); renderEngagements();
+    }
+
+    function syncEngSubtabs() { $$('#view-engagements .subtab').forEach(t => t.classList.toggle('active', t.dataset.esub === EF.esub)); }
+
+    function initEngagement() {
+      $$('#view-engagements .subtab').forEach(t => t.addEventListener('click', () => { EF.esub = t.dataset.esub; syncEngSubtabs(); renderEngagements(); }));
+      $('#poolSearch').addEventListener('input', e => { EF.search = e.target.value; renderPool(); });
+      buildMS($('[data-ms="poolType"]'), ENGAGEMENT_TYPES.filter(t => t.active).map(t => t.name), EF.engType, renderPool);
+      buildMS($('[data-ms="poolFormat"]'), ['In person', 'Zoom', 'Either'], EF.format, renderPool);
+      buildMS($('[data-ms="poolTopic"]'), allOptinTopics(), EF.topic, renderPool);
+      buildMS($('[data-ms="poolIndustry"]'), [...new Set(OPTINS.map(o => alumniById(o.alumniId)).filter(Boolean).map(a => a.industry))].sort(), EF.industry, renderPool);
+      $('#newPanelBtn').addEventListener('click', () => openNewEvent(EF.esub));
+      $('#pfCreate').addEventListener('click', createEvent);
+      $('#pfFormat').addEventListener('change', syncPanelLocLabel);
+      $('#panelCandSearch').addEventListener('input', renderManage);
+      $('#panelCandSort').addEventListener('change', renderManage);
+      $('#panelCandFormat').addEventListener('change', renderManage);
+      buildMS($('[data-ms="panelCandIndustry"]'), [...new Set(OPTINS.map(o => alumniById(o.alumniId)).filter(Boolean).map(a => a.industry))].sort(), panelCandIndustrySet, renderManage);
+    }
+
+    // ===== Boot =====
+    function renderAll() { renderOverview(); renderAlumni(); renderRequests(); renderEngTypes(); renderEngagements(); }
+    initFilters();
+    initRequestFilters();
+    initEngagement();
+    renderAll();
+    window.renderAll = renderAll; // exposed for live-data swap
+
+  })();
+  </script>
+
+  <!-- ============================================================
+       IFRAME HEIGHT REPORTER
+       Matches the existing CloverPath module convention. The Webflow
+       parent already listens for "CP_ALUMNI_RESIZE" and resizes the
+       iframe, so this embeds with no parent-side change. This message
+       carries no sensitive data, so a wildcard target origin is fine.
+       The session / auth bridge stays origin-scoped separately.
+  ============================================================= -->
+  <script>
+  (function () {
+    function postHeight() {
+      var h = document.documentElement.scrollHeight;
+      try { parent.postMessage({ type: "CP_ALUMNI_RESIZE", height: h }, "*"); } catch (e) {}
+    }
+    window.addEventListener("load", postHeight);
+    window.addEventListener("resize", postHeight);
+    if (window.ResizeObserver) {
+      new ResizeObserver(postHeight).observe(document.body);
+    } else {
+      setInterval(postHeight, 1000);
+    }
+  })();
+  </script>
+
+</body>
+</html>
